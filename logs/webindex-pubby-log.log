@@ -1,0 +1,191 @@
+2013-04-05 11:03:08  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:03:08  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:03:08  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:03:08  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:03:08  INFO util.JenaMemcachedClient - Trying to get Query119973053 from cache
+2013-04-05 11:03:09  INFO util.JenaMemcachedClient - Query119973053 was not stored in the cache, querying SPARQL endpoint
+2013-04-05 11:03:11  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:03:11  INFO impl.AbstractController - Controller has been stopped.
+2013-04-05 11:03:11  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:03:11  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:03:11  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:03:11  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:03:11  INFO util.JenaMemcachedClient - Trying to get Query119973053 from cache
+2013-04-05 11:03:11  INFO impl.AbstractController - Controller has been stopped.
+2013-04-05 11:03:11  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:03:11  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:03:11  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:03:11  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:03:11  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:03:11  INFO util.JenaMemcachedClient - Trying to get Query119973053 from cache
+2013-04-05 11:03:11  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:03:11  INFO impl.AbstractController - Controller has been stopped.
+2013-04-05 11:03:11  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:03:11  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:03:11  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:03:11  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:03:11  INFO util.JenaMemcachedClient - Trying to get Query1183798008 from cache
+2013-04-05 11:03:11  INFO util.JenaMemcachedClient - Query1183798008 was not stored in the cache, querying SPARQL endpoint
+2013-04-05 11:03:12  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:03:12  INFO impl.AbstractController - Controller has been stopped.
+2013-04-05 11:03:12  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:03:12  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:03:12  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:03:12  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:03:12  INFO util.JenaMemcachedClient - Trying to get Query1387700939 from cache
+2013-04-05 11:03:12  INFO util.JenaMemcachedClient - Query1387700939 was not stored in the cache, querying SPARQL endpoint
+2013-04-05 11:03:13  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:03:13  INFO impl.AbstractController - Controller has been stopped.
+2013-04-05 11:03:13  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:03:13  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:03:13  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:03:13  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:03:13  INFO util.JenaMemcachedClient - Trying to get Query994308093 from cache
+2013-04-05 11:03:13  INFO util.JenaMemcachedClient - Query994308093 was not stored in the cache, querying SPARQL endpoint
+2013-04-05 11:03:13 ERROR util.JenaMemcachedClient - An error ocurred querying the endpoint. The results will not be stored in the cache.
+com.hp.hpl.jena.query.QueryException: Invalid ResultSet
+	at es.weso.util.JenaMemcachedClient.queryEndpoint(JenaMemcachedClient.java:140)
+	at es.weso.util.JenaMemcachedClient.queryEndpointAndStore(JenaMemcachedClient.java:116)
+	at es.weso.util.JenaMemcachedClient.getResultFromCache(JenaMemcachedClient.java:77)
+	at es.weso.util.JenaMemcachedClient.executeQuery(JenaMemcachedClient.java:41)
+	at es.weso.data.CountryData.getObservation(CountryData.java:75)
+	at es.weso.test.QueriesTester.testSingleIndicator(QueriesTester.java:72)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:601)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:76)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:50)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:193)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:52)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:191)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:42)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:184)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:236)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:467)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:683)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:390)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:197)
+2013-04-05 11:03:13  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:03:13  INFO impl.AbstractController - Controller has been stopped.
+2013-04-05 11:05:25  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:05:26  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:05:26  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:05:26  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:05:26  INFO util.JenaMemcachedClient - Trying to get Query119973053 from cache
+2013-04-05 11:05:26  INFO impl.AbstractController - Controller has been stopped.
+2013-04-05 11:05:26  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:05:27  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:05:27  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:05:27  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:05:27  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:05:27  INFO util.JenaMemcachedClient - Trying to get Query119973053 from cache
+2013-04-05 11:05:27  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:05:27  INFO impl.AbstractController - Controller has been stopped.
+2013-04-05 11:05:27  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:05:27  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:05:27  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:05:27  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:05:27  INFO util.JenaMemcachedClient - Trying to get Query119973053 from cache
+2013-04-05 11:05:27  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:05:27  INFO impl.AbstractController - Controller has been stopped.
+2013-04-05 11:05:27  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:05:27  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:05:27  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:05:27  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:05:27  INFO util.JenaMemcachedClient - Trying to get Query1183798008 from cache
+2013-04-05 11:05:27  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:05:27  INFO impl.AbstractController - Controller has been stopped.
+2013-04-05 11:05:27  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:05:27  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:05:27  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:05:27  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:05:27  INFO util.JenaMemcachedClient - Trying to get Query1387700939 from cache
+2013-04-05 11:05:27  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:05:27  INFO impl.AbstractController - Controller has been stopped.
+2013-04-05 11:05:27  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:05:27  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:05:27  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:05:27  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:05:27  INFO util.JenaMemcachedClient - Trying to get Query994308093 from cache
+2013-04-05 11:05:28  INFO util.JenaMemcachedClient - Query994308093 was not stored in the cache, querying SPARQL endpoint
+2013-04-05 11:05:28 ERROR util.JenaMemcachedClient - An error ocurred querying the endpoint. The results will not be stored in the cache.
+com.hp.hpl.jena.query.QueryException: Invalid ResultSet
+	at es.weso.util.JenaMemcachedClient.queryEndpoint(JenaMemcachedClient.java:140)
+	at es.weso.util.JenaMemcachedClient.queryEndpointAndStore(JenaMemcachedClient.java:116)
+	at es.weso.util.JenaMemcachedClient.getResultFromCache(JenaMemcachedClient.java:77)
+	at es.weso.util.JenaMemcachedClient.executeQuery(JenaMemcachedClient.java:41)
+	at es.weso.data.CountryData.getObservation(CountryData.java:75)
+	at es.weso.test.QueriesTester.testSingleIndicator(QueriesTester.java:72)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:601)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:76)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:50)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:193)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:52)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:191)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:42)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:184)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:236)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:467)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:683)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:390)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:197)
+2013-04-05 11:05:28  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:05:50  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:05:50  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:05:50  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:05:50  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:05:50  INFO util.JenaMemcachedClient - Trying to get Query119973053 from cache
+2013-04-05 11:05:51  INFO impl.AbstractController - Controller has been stopped.
+2013-04-05 11:05:51  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:05:52  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:05:52  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:05:52  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:05:52  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:05:52  INFO util.JenaMemcachedClient - Trying to get Query119973053 from cache
+2013-04-05 11:05:52  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:05:52  INFO impl.AbstractController - Controller has been stopped.
+2013-04-05 11:05:52  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:05:52  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:05:52  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:05:52  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:05:52  INFO util.JenaMemcachedClient - Trying to get Query119973053 from cache
+2013-04-05 11:05:52  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:05:52  INFO impl.AbstractController - Controller has been stopped.
+2013-04-05 11:05:52  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:05:52  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:05:52  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:05:52  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:05:52  INFO util.JenaMemcachedClient - Trying to get Query1183798008 from cache
+2013-04-05 11:05:52  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:05:52  INFO impl.AbstractController - Controller has been stopped.
+2013-04-05 11:05:52  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:05:52  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:05:52  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:05:52  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:05:52  INFO util.JenaMemcachedClient - Trying to get Query1387700939 from cache
+2013-04-05 11:05:52  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:05:52  INFO impl.AbstractController - Controller has been stopped.
+2013-04-05 11:05:52  WARN xmemcached.XMemcachedClient - XMemcachedClient use Text protocol
+2013-04-05 11:05:52  INFO impl.SelectorManager - Creating 4 reactors...
+2013-04-05 11:05:52  WARN impl.AbstractController - The Controller started at localhost/127.0.0.1:0 ...
+2013-04-05 11:05:52  WARN impl.MemcachedConnector - Add a session: 127.0.0.1:11211
+2013-04-05 11:05:52  INFO util.JenaMemcachedClient - Trying to get Query994308093 from cache
+2013-04-05 11:05:52  INFO util.JenaMemcachedClient - Query994308093 was not stored in the cache, querying SPARQL endpoint
+2013-04-05 11:05:53  WARN impl.MemcachedConnector - Remove a session: 127.0.0.1:11211
+2013-04-05 11:05:53  INFO impl.AbstractController - Controller has been stopped.
