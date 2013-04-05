@@ -8,7 +8,7 @@ import es.weso.data.CountryData;
 import es.weso.model.Observation;
 import es.weso.model.Rank;
 
-public class QueriesTester {
+public class QueriesTest {
 
 	@Test
 	public void testRank() {
