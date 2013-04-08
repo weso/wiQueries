@@ -3,9 +3,10 @@ package es.weso.data;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -93,33 +94,20 @@ public class CountryData {
 			String countryCode) {
 		checkValidYear(year);
 		checkValidCountryCode(countryCode);
-		Collection<String> indicators = getAvailableIndicators();
-		Collection<Observation> observations = new ArrayDeque<Observation>(
-				indicators.size());
-		for (String indicator : indicators) {
-			try {
-				observations.add(getObservation(year, indicator, countryCode));
-			} catch (IllegalArgumentException e) {
-				log.info("Indicator " + indicator + " is not present for "
-						+ countryCode + " in " + year);
-			}
+		List<String> indicators = getAvailableIndicators();
+		Collection<Observation> observations = new ArrayDeque<Observation>(indicators.size());
+		for(int i = 0; i < indicators.size(); i+=10) {
+			int to = i+10 > indicators.size()? indicators.size() : i+10;
+			observations.addAll(getObservations(stringToCollection(year), indicators.subList(i, to),
+					stringToCollection(countryCode)));
 		}
 		return observations;
 	}
 
-	/**
-	 * Gets the name of all the available indicators
-	 * 
-	 * @return The name of all the available indicators
-	 */
-	private Collection<String> getAvailableIndicators() {
-		Collection<String> indicators = new HashSet<String>();
-		ResultSet rs = client.executeQuery(Conf.getQuery("indicators"));
-		while (rs.hasNext()) {
-			QuerySolution qs = rs.next();
-			indicators.add(qs.getLiteral("name").getString());
-		}
-		return indicators;
+	private Collection<String> stringToCollection(String countryCode) {
+		Collection<String> countryCodes = new ArrayDeque<String>(1);
+		countryCodes.add(countryCode);
+		return countryCodes;
 	}
 
 	/**
@@ -246,6 +234,21 @@ public class CountryData {
 			throw new IllegalArgumentException("Invalid countryCode", e);
 		}
 		return country;
+	}
+
+	/**
+	 * Gets the name of all the available indicators
+	 * 
+	 * @return The name of all the available indicators
+	 */
+	private List<String> getAvailableIndicators() {
+		List<String> indicators = new ArrayList<String>(84);
+		ResultSet rs = client.executeQuery(Conf.getQuery("indicators"));
+		while (rs.hasNext()) {
+			QuerySolution qs = rs.next();
+			indicators.add(qs.getLiteral("name").getString());
+		}
+		return indicators;
 	}
 
 	/**
