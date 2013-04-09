@@ -58,7 +58,7 @@ public class CompareServices {
 			@PathVariable String countryCode) {
 		return data.getObservation(year, countryCode.toUpperCase());
 	}
-	
+
 	@RequestMapping(value = "/country/{year}/{countryCode}", method = RequestMethod.GET)
 	@ResponseBody
 	public Country country(@PathVariable String year,

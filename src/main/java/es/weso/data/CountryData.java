@@ -3,10 +3,9 @@ package es.weso.data;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -64,19 +63,19 @@ public class CountryData {
 	 * 
 	 * @param year
 	 *            The year to be checked
-	 * @param countrycode
+	 * @param countryCode
 	 *            The iso-alpha-2 code of the {@link Country} to be checked
 	 * @return The {@link Rank}s of a {@link Country} observed in a specific
 	 *         year
 	 */
-	public Map<String, Rank> getRank(String year, String countrycode) {
+	public Map<String, Rank> getRank(String year, String countryCode) {
 		checkValidYear(year);
 		String[] availableCategories = Conf.getConfig("available.categories")
 				.split(";");
 		Map<String, Rank> ranks = new HashMap<String, Rank>();
 		for (String category : availableCategories) {
 			ResultSet rs = client.executeQuery(getQueryString(category, year));
-			ranks.put(category, new RankMap(rs).getData().get(countrycode));
+			ranks.put(category, new RankMap(rs).getData().get(countryCode));
 		}
 		return ranks;
 	}
@@ -94,20 +93,18 @@ public class CountryData {
 			String countryCode) {
 		checkValidYear(year);
 		checkValidCountryCode(countryCode);
-		List<String> indicators = getAvailableIndicators();
-		Collection<Observation> observations = new ArrayDeque<Observation>(indicators.size());
-		for(int i = 0; i < indicators.size(); i+=10) {
-			int to = i+10 > indicators.size()? indicators.size() : i+10;
-			observations.addAll(getObservations(stringToCollection(year), indicators.subList(i, to),
-					stringToCollection(countryCode)));
+		Collection<Observation> observations = new ArrayDeque<Observation>(
+				getAvailableIndicators().size());
+		ResultSet rs = client.executeQuery(Conf.getQuery("all.observations",
+				year, countryCode));
+		while (rs.hasNext()) {
+			try {
+				observations.add(querySolutionToObservation(rs.next()));
+			} catch (URISyntaxException e) {
+				log.info("Found an invalid URI ", e);
+			}
 		}
 		return observations;
-	}
-
-	private Collection<String> stringToCollection(String countryCode) {
-		Collection<String> countryCodes = new ArrayDeque<String>(1);
-		countryCodes.add(countryCode);
-		return countryCodes;
 	}
 
 	/**
@@ -127,6 +124,7 @@ public class CountryData {
 			String countryCode) {
 		checkValidYear(year);
 		checkValidCountryCode(countryCode);
+		checkValidIndicator(indicator);
 		ResultSet rs = client.executeQuery(getQueryString(year, indicator,
 				countryCode));
 		try {
@@ -241,8 +239,8 @@ public class CountryData {
 	 * 
 	 * @return The name of all the available indicators
 	 */
-	private List<String> getAvailableIndicators() {
-		List<String> indicators = new ArrayList<String>(84);
+	private Collection<String> getAvailableIndicators() {
+		Collection<String> indicators = new HashSet<String>();
 		ResultSet rs = client.executeQuery(Conf.getQuery("indicators"));
 		while (rs.hasNext()) {
 			QuerySolution qs = rs.next();
@@ -362,6 +360,19 @@ public class CountryData {
 	private void checkValidYear(String year) {
 		if (!year.matches("\\d+")) {
 			throw new IllegalArgumentException(year + " is not a valid year");
+		}
+	}
+
+	/**
+	 * Checks if a string is a valid indicator
+	 * 
+	 * @param indicator
+	 *            The indicator to be checked
+	 */
+	private void checkValidIndicator(String indicator) {
+		if (!getAvailableIndicators().contains(indicator)) {
+			throw new IllegalArgumentException(indicator
+					+ " is not a valid indicator");
 		}
 	}
 

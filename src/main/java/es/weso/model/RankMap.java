@@ -35,7 +35,7 @@ public class RankMap implements Serializable {
 			String val = "" + qs.getLiteral("value").getDouble();
 			BigDecimal big = new BigDecimal(val);
 			big = big.setScale(2, RoundingMode.HALF_UP);
-			data.put(qs.getLiteral("code").getString().toLowerCase(), new Rank(
+			data.put(qs.getLiteral("code").getString().toUpperCase(), new Rank(
 					++i, big.doubleValue()));
 		}
 	}
