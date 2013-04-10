@@ -4,9 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayDeque;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.apache.log4j.Logger;
@@ -23,7 +21,8 @@ import es.weso.util.Conf;
 import es.weso.util.JenaMemcachedClient;
 
 /**
- * Class to get data of a specific {@link Country}
+ * Class to get data of a specific {@link Country} from the
+ * {@link JenaMemcachedClient}
  * 
  * @author <a href="http://alejandro-montes.appspot.com">Alejandro Montes
  *         García</a>
@@ -53,31 +52,29 @@ public class CountryData {
 	 *         observed in a specific year
 	 */
 	public Rank getRank(String category, String year, String countrycode) {
-		checkValidYear(year);
 		ResultSet rs = client.executeQuery(getQueryString(category, year));
 		return new RankMap(rs).getData().get(countrycode);
 	}
 
 	/**
-	 * Gets the {@link Rank}s of a {@link Country} observed in a specific year
+	 * Converts a iso-alpha-3 code into a iso-alpha-2 code
 	 * 
-	 * @param year
-	 *            The year to be checked
 	 * @param countryCode
-	 *            The iso-alpha-2 code of the {@link Country} to be checked
-	 * @return The {@link Rank}s of a {@link Country} observed in a specific
-	 *         year
+	 *            The iso-alpha-3 code to be converted
+	 * @return The converted iso-alpha-2 code
 	 */
-	public Map<String, Rank> getRank(String year, String countryCode) {
-		checkValidYear(year);
-		String[] availableCategories = Conf.getConfig("available.categories")
-				.split(";");
-		Map<String, Rank> ranks = new HashMap<String, Rank>();
-		for (String category : availableCategories) {
-			ResultSet rs = client.executeQuery(getQueryString(category, year));
-			ranks.put(category, new RankMap(rs).getData().get(countryCode));
+	public String convertCountryCode(String countryCode) {
+		ResultSet rs = client.executeQuery(Conf.getQuery("convert.code",
+				countryCode));
+		try {
+			return rs.next().getLiteral("code").getString();
+		} catch (NoSuchElementException e) {
+			throw new IllegalArgumentException(countryCode
+					+ " is not a valid countryCode");
+		} catch (NullPointerException e) {
+			throw new IllegalArgumentException(countryCode
+					+ " is not a valid countryCode");
 		}
-		return ranks;
 	}
 
 	/**
@@ -91,8 +88,6 @@ public class CountryData {
 	 */
 	public Collection<Observation> getObservation(String year,
 			String countryCode) {
-		checkValidYear(year);
-		checkValidCountryCode(countryCode);
 		Collection<Observation> observations = new ArrayDeque<Observation>(
 				getAvailableIndicators().size());
 		ResultSet rs = client.executeQuery(Conf.getQuery("all.observations",
@@ -122,9 +117,6 @@ public class CountryData {
 	 */
 	public Observation getObservation(String year, String indicator,
 			String countryCode) {
-		checkValidYear(year);
-		checkValidCountryCode(countryCode);
-		checkValidIndicator(indicator);
 		ResultSet rs = client.executeQuery(getQueryString(year, indicator,
 				countryCode));
 		try {
@@ -154,12 +146,6 @@ public class CountryData {
 	 */
 	public Collection<Observation> getObservations(Collection<String> years,
 			Collection<String> indicators, Collection<String> countryCodes) {
-		for (String year : years) {
-			checkValidYear(year);
-		}
-		for (String countryCode : countryCodes) {
-			checkValidCountryCode(countryCode);
-		}
 		Collection<Observation> observations = new ArrayDeque<Observation>(
 				years.size() * indicators.size() * countryCodes.size());
 		ResultSet rs = client.executeQuery(getQueryString(years, indicators,
@@ -175,35 +161,13 @@ public class CountryData {
 	}
 
 	/**
-	 * Gets a {@link Country} with {@link Observation}s and {@link Rank}s in a
-	 * specific year
-	 * 
-	 * @param year
-	 *            The year to be observed
-	 * @param countryCode
-	 *            The {@link Country} to be observed
-	 * @return The {@link Country} with {@link Observation}s and {@link Rank}s
-	 *         in a specific year
-	 */
-	public Country getCountry(String year, String countryCode) {
-		checkValidYear(year);
-		checkValidCountryCode(countryCode);
-		Country country = getCountryData(countryCode);
-		country.setObservations(getObservation(year, countryCode));
-		country.setRanks(getRank(year, countryCode));
-		country.setCode_iso_alpha2(countryCode);
-		country.setYear(Integer.parseInt(year));
-		return country;
-	}
-
-	/**
 	 * Gets country specific data
 	 * 
 	 * @param countryCode
 	 *            The code of the {@link Country} to be retrieved
 	 * @return A {@link Country} without observations and ranks
 	 */
-	private Country getCountryData(String countryCode) {
+	public Country getCountryData(String countryCode) {
 		Country country = new Country();
 		ResultSet rs = client.executeQuery(Conf.getQuery("country.data",
 				countryCode));
@@ -239,7 +203,7 @@ public class CountryData {
 	 * 
 	 * @return The name of all the available indicators
 	 */
-	private Collection<String> getAvailableIndicators() {
+	public Collection<String> getAvailableIndicators() {
 		Collection<String> indicators = new HashSet<String>();
 		ResultSet rs = client.executeQuery(Conf.getQuery("indicators"));
 		while (rs.hasNext()) {
@@ -336,44 +300,6 @@ public class CountryData {
 					+ " is an invalid category", e);
 		}
 		return query;
-	}
-
-	/**
-	 * Checks if a string is a valid iso-alpha2 country code
-	 * 
-	 * @param countryCode
-	 *            The string to be checked
-	 */
-	private void checkValidCountryCode(String countryCode) {
-		if (!countryCode.matches("[A-Z]{2}")) {
-			throw new IllegalArgumentException(countryCode
-					+ " is not a valid countryCode");
-		}
-	}
-
-	/**
-	 * Checks if a string is a valid year
-	 * 
-	 * @param year
-	 *            The year to be checked
-	 */
-	private void checkValidYear(String year) {
-		if (!year.matches("\\d+")) {
-			throw new IllegalArgumentException(year + " is not a valid year");
-		}
-	}
-
-	/**
-	 * Checks if a string is a valid indicator
-	 * 
-	 * @param indicator
-	 *            The indicator to be checked
-	 */
-	private void checkValidIndicator(String indicator) {
-		if (!getAvailableIndicators().contains(indicator)) {
-			throw new IllegalArgumentException(indicator
-					+ " is not a valid indicator");
-		}
 	}
 
 }

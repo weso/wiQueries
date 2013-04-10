@@ -4,7 +4,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import es.weso.data.CountryData;
+import es.weso.business.CountryManagement;
 import es.weso.model.Observation;
 import es.weso.model.Rank;
 
@@ -12,7 +12,7 @@ public class QueriesTest {
 
 	@Test
 	public void testRank() {
-		CountryData cd = new CountryData();
+		CountryManagement cd = new CountryManagement();
 
 		Rank es = cd.getRank("global", "2011", "es");
 		Assert.assertEquals(18, es.getPosition());
@@ -22,17 +22,21 @@ public class QueriesTest {
 		Assert.assertEquals(1, se.getPosition());
 		Assert.assertEquals(100.00, se.getValue());
 
-		Rank wrong = cd.getRank("global", "2011", "wrong");
-		Assert.assertNull(wrong);
 		try {
-			wrong = cd.getRank("global", "wrong", "es");
+			cd.getRank("global", "2011", "wrong");
+		} catch (IllegalArgumentException e) {
+		} catch (Exception e) {
+			Assert.fail();
+		}
+		try {
+			cd.getRank("global", "wrong", "es");
 			Assert.fail();
 		} catch (IllegalArgumentException e) {
 		} catch (Exception e) {
 			Assert.fail();
 		}
 		try {
-			wrong = cd.getRank("wrong", "2011", "es");
+			cd.getRank("wrong", "2011", "es");
 			Assert.fail();
 		} catch (IllegalArgumentException e) {
 		} catch (Exception e) {
@@ -42,7 +46,7 @@ public class QueriesTest {
 
 	@Test
 	public void testSingleIndicator() {
-		CountryData cd = new CountryData();
+		CountryManagement cd = new CountryManagement();
 
 		Observation esItud2011 = cd.getObservation("2011", "ITUD", "ES");
 		Assert.assertEquals(114.233016778964, esItud2011.getValue());
