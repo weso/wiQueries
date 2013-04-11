@@ -2,6 +2,12 @@ package es.weso.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+
+@JsonAutoDetect
+@XmlRootElement
 /**
  * A single rank (position and value) that can be serialised
  * 
@@ -15,6 +21,10 @@ public class Rank implements Serializable {
 	private static final long serialVersionUID = -574892962507256140L;
 	private int position;
 	private double value;
+
+	public Rank() {
+
+	}
 
 	public Rank(int position, double value) {
 		this.position = position;

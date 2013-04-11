@@ -2,6 +2,12 @@ package es.weso.model;
 
 import java.net.URI;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+
+@JsonAutoDetect
+@XmlRootElement
 public class Label {
 	private String value;
 	private URI uri;

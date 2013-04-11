@@ -1,8 +1,11 @@
 package es.weso.model;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 @JsonAutoDetect
+@XmlRootElement
 /**
  * Representation of an observation
  * 
@@ -15,6 +18,10 @@ public class Observation {
 	private Label country, indicator;
 	private String year;
 	private double value;
+	
+	public Observation() {
+		
+	}
 
 	public Observation(Label country, Label indicator, String year, double value) {
 		this.country = country;

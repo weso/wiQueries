@@ -2,13 +2,13 @@ package es.weso.business;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import es.weso.data.CountryData;
 import es.weso.model.Country;
 import es.weso.model.Observation;
+import es.weso.model.ObservationCollection;
 import es.weso.model.Rank;
+import es.weso.model.RankMap;
 import es.weso.util.Conf;
 
 /**
@@ -58,12 +58,12 @@ public class CountryManagement {
 	 * @return The {@link Rank}s of a {@link Country} observed in a specific
 	 *         year
 	 */
-	public Map<String, Rank> getRank(String year, String countryCode) {
-		Map<String, Rank> ranks = new HashMap<String, Rank>();
+	public RankMap getRank(String year, String countryCode) {
+		RankMap ranks = new RankMap();
 		String[] availableCategories = Conf.getConfig("available.categories")
 				.split(";");
 		for (String category : availableCategories) {
-			ranks.put(category, getRank(category, year, countryCode));
+			ranks.getData().put(category, getRank(category, year, countryCode));
 		}
 		return ranks;
 	}
@@ -100,11 +100,12 @@ public class CountryManagement {
 	 *            be checked
 	 * @return The {@link Observation}s of a {@link Country} in a specific year
 	 */
-	public Collection<Observation> getObservation(String year,
-			String countryCode) {
+	public ObservationCollection getObservation(String year, String countryCode) {
 		checkValidYear(year);
 		countryCode = checkValidCountryCode(countryCode);
-		return data.getObservation(year, countryCode);
+		ObservationCollection obs = new ObservationCollection();
+		obs.setObservations(data.getObservation(year, countryCode));
+		return obs;
 	}
 
 	/**
@@ -136,7 +137,7 @@ public class CountryManagement {
 		}
 		return data.getObservations(years, indicators, isoAlpha2Codes);
 	}
-	
+
 	/**
 	 * Gets a {@link Country} with {@link Observation}s and {@link Rank}s in a
 	 * specific year
@@ -152,8 +153,9 @@ public class CountryManagement {
 		checkValidYear(year);
 		countryCode = checkValidCountryCode(countryCode);
 		Country country = data.getCountryData(countryCode);
-		country.setObservations(getObservation(year, countryCode));
-		country.setRanks(getRank(year, countryCode));
+		country.setObservations(getObservation(year, countryCode)
+				.getObservations());
+		country.setRanks(getRank(year, countryCode).getData());
 		country.setCode_iso_alpha2(countryCode);
 		country.setYear(Integer.parseInt(year));
 		return country;

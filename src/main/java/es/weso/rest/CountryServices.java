@@ -1,8 +1,5 @@
 package es.weso.rest;
 
-import java.util.Collection;
-import java.util.Map;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +9,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.weso.business.CountryManagement;
 import es.weso.model.Country;
 import es.weso.model.Observation;
+import es.weso.model.ObservationCollection;
 import es.weso.model.Rank;
+import es.weso.model.RankMap;
 
 /**
  * Class to map services that will compare {@link Country countries}
@@ -40,7 +39,7 @@ public class CountryServices {
 
 	@RequestMapping(value = "/rank/{year}/{countryCode}", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Rank> rank(@PathVariable String year,
+	public RankMap rank(@PathVariable String year,
 			@PathVariable String countryCode) {
 		return countryManagement.getRank(year, countryCode);
 	}
@@ -54,7 +53,7 @@ public class CountryServices {
 
 	@RequestMapping(value = "/observation/{year}/{countryCode}", method = RequestMethod.GET)
 	@ResponseBody
-	public Collection<Observation> observation(@PathVariable String year,
+	public ObservationCollection observation(@PathVariable String year,
 			@PathVariable String countryCode) {
 		return countryManagement.getObservation(year, countryCode);
 	}

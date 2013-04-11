@@ -3,9 +3,12 @@ package es.weso.model;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 @JsonAutoDetect
+@XmlRootElement
 /**
  * Representation of a country
  * 
