@@ -1,19 +1,14 @@
 package es.weso.data;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 
-import org.apache.log4j.Logger;
-
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 
 import es.weso.model.Country;
-import es.weso.model.Label;
 import es.weso.model.Observation;
 import es.weso.model.Rank;
 import es.weso.model.RankMap;
@@ -31,7 +26,6 @@ import es.weso.util.JenaMemcachedClient;
  */
 public class CountryData {
 
-	private static Logger log = Logger.getLogger(CountryData.class);
 	private JenaMemcachedClient client;
 
 	public CountryData() {
@@ -93,11 +87,7 @@ public class CountryData {
 		ResultSet rs = client.executeQuery(Conf.getQuery("all.observations",
 				year, countryCode));
 		while (rs.hasNext()) {
-			try {
-				observations.add(querySolutionToObservation(rs.next()));
-			} catch (URISyntaxException e) {
-				log.info("Found an invalid URI ", e);
-			}
+			observations.add(querySolutionToObservation(rs.next()));
 		}
 		return observations;
 	}
@@ -124,9 +114,6 @@ public class CountryData {
 		} catch (NoSuchElementException e) {
 			throw new IllegalArgumentException("Invalid indicator " + indicator
 					+ " for year " + year + " and country " + countryCode, e);
-		} catch (URISyntaxException e) {
-			throw new IllegalArgumentException("Invalid indicator " + indicator
-					+ " for year " + year + " and country " + countryCode, e);
 		}
 	}
 
@@ -151,11 +138,7 @@ public class CountryData {
 		ResultSet rs = client.executeQuery(getQueryString(years, indicators,
 				countryCodes));
 		while (rs.hasNext()) {
-			try {
-				observations.add(querySolutionToObservation(rs.next()));
-			} catch (URISyntaxException e) {
-				log.info("Found an invalid URI ", e);
-			}
+			observations.add(querySolutionToObservation(rs.next()));
 		}
 		return observations;
 	}
@@ -174,24 +157,12 @@ public class CountryData {
 		try {
 			QuerySolution qs = rs.next();
 			country.setCode_iso_alpha3(qs.getLiteral("id").getString());
-			try {
-				Label label = new Label();
-				label.setUri(new URI(qs.getResource("country").getURI()));
-				label.setValue(qs.getLiteral("name").getString());
-				country.setLabel(label);
-			} catch (URISyntaxException e) {
-				log.error("Found invalid URI", e);
-			}
+			country.setName(qs.getLiteral("name").getString());
+			country.setUri(qs.getResource("country").getURI());
 			country.setLat(qs.getLiteral("lat").getDouble());
 			country.setLon(qs.getLiteral("lon").getDouble());
-			try {
-				Label region = new Label();
-				region.setUri(new URI(qs.getResource("region").getURI()));
-				region.setValue(qs.getLiteral("regionName").getString());
-				country.setRegion(region);
-			} catch (URISyntaxException e) {
-				log.error("Found invalid URI", e);
-			}
+			country.setRegionName(qs.getLiteral("regionName").getString());
+			country.setRegionUri(qs.getResource("region").getURI());
 		} catch (NoSuchElementException e) {
 			throw new IllegalArgumentException("Invalid countryCode", e);
 		}
@@ -219,19 +190,18 @@ public class CountryData {
 	 * @param qs
 	 *            The {@link QuerySolution} to be converted
 	 * @return The resulting {@link Observation}
-	 * @throws URISyntaxException
-	 *             if an {@link URI} of the result is malformed
 	 */
-	private Observation querySolutionToObservation(QuerySolution qs)
-			throws URISyntaxException {
-		Label country = new Label();
-		country.setUri(new URI(qs.getResource("country").getURI()));
-		country.setValue(qs.getLiteral("code").getString());
-		Label indicator = new Label();
-		indicator.setUri(new URI(qs.getResource("indicator").getURI()));
-		indicator.setValue(qs.getLiteral("indicatorLabel").getString());
-		return new Observation(country, indicator, qs.getLiteral("year")
-				.getString(), qs.getLiteral("value").getDouble());
+	private Observation querySolutionToObservation(QuerySolution qs) {
+		Observation obs = new Observation();
+		obs.setCountryName(qs.getLiteral("code").getString());
+		obs.setCountryUri(qs.getResource("country").getURI());
+		obs.setIndicatorName(qs.getLiteral("indicatorLabel").getString());
+		obs.setIndicatorUri(qs.getResource("indicator").getURI());
+		obs.setValue(qs.getLiteral("value").getDouble());
+		obs.setYear(qs.getLiteral("year").getString());
+		obs.setUri(qs.getResource("obs").getURI());
+		obs.setLabel(qs.getLiteral("label").getString());
+		return obs;
 	}
 
 	/**

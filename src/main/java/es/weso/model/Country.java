@@ -7,8 +7,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 
+import es.weso.annotations.LinkedDataEntity;
+import es.weso.annotations.LinkedDataProperty;
+import es.weso.annotations.LinkedDataUri;
+
 @JsonAutoDetect
 @XmlRootElement
+@LinkedDataEntity(type = "http://data.webfoundation.org/webindex/ontology/Country")
 /**
  * Representation of a country
  * 
@@ -17,31 +22,51 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
  * @version 1.0
  * @since 27/03/2013
  */
-public class Country implements LinkedDataResource {
+public class Country {
 
-	private Label label, region;
-	private String code_iso_alpha2, code_iso_alpha3;
+	private String name, uri, regionName, regionUri, code_iso_alpha2,
+			code_iso_alpha3;;
 	private int year;
 	private double lat, lon;
 	private Collection<Observation> observations;
 	private Map<String, Rank> ranks;
 
-	public Label getLabel() {
-		return label;
+	@LinkedDataProperty(predicate = "http://www.w3.org/2000/01/rdf-schema#label")
+	public String getName() {
+		return name;
 	}
 
-	public void setLabel(Label label) {
-		this.label = label;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public Label getRegion() {
-		return region;
+	@LinkedDataUri
+	public String getUri() {
+		return uri;
 	}
 
-	public void setRegion(Label region) {
-		this.region = region;
+	public void setUri(String uri) {
+		this.uri = uri;
 	}
 
+	public String getRegionName() {
+		return regionName;
+	}
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
+	}
+
+	@LinkedDataProperty(predicate = "http://www.w3.org/2000/01/rdf-schema#label", inverse = true)
+	public String getRegionUri() {
+		return regionUri;
+	}
+
+	public void setRegionUri(String regionUri) {
+		this.regionUri = regionUri;
+	}
+
+	@LinkedDataProperty(predicate = "http://data.webfoundation.org/webindex/ontology/has-iso-alpha2-code")
 	public String getCode_iso_alpha2() {
 		return code_iso_alpha2;
 	}
@@ -50,6 +75,7 @@ public class Country implements LinkedDataResource {
 		this.code_iso_alpha2 = code_iso_alpha2;
 	}
 
+	@LinkedDataProperty(predicate = "http://data.webfoundation.org/webindex/ontology/has-iso-alpha3-code")
 	public String getCode_iso_alpha3() {
 		return code_iso_alpha3;
 	}
@@ -66,6 +92,7 @@ public class Country implements LinkedDataResource {
 		this.year = year;
 	}
 
+	@LinkedDataProperty(predicate = "http://www.w3.org/2003/01/geo/wgs84_pos#lat")
 	public double getLat() {
 		return lat;
 	}
@@ -74,6 +101,7 @@ public class Country implements LinkedDataResource {
 		this.lat = lat;
 	}
 
+	@LinkedDataProperty(predicate = "http://www.w3.org/2003/01/geo/wgs84_pos#long")
 	public double getLon() {
 		return lon;
 	}
@@ -90,24 +118,13 @@ public class Country implements LinkedDataResource {
 		this.ranks = ranks;
 	}
 
+	@LinkedDataProperty(predicate = "http://data.webfoundation.org/webindex/ontology/ref-area", inverse = true)
 	public Collection<Observation> getObservations() {
 		return observations;
 	}
 
 	public void setObservations(Collection<Observation> observations) {
 		this.observations = observations;
-	}
-
-	public String asRDF() {
-		StringBuilder sb = new StringBuilder("<?xml version=\"1.0\"?>");
-		sb.append("<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">");
-		// TODO Auto-generated method stub
-		return sb.toString();
-	}
-
-	public String asTTL() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

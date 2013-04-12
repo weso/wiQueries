@@ -15,35 +15,50 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
  * @since 04/04/2013
  */
 public class Observation {
-	private Label country, indicator;
-	private String year;
+
+	private String uri;
+	private String label;
+	private String countryName, countryUri, indicatorName, indicatorUri, year;
 	private double value;
 	
-	public Observation() {
-		
+	public String getLabel() {
+		return label;
 	}
 
-	public Observation(Label country, Label indicator, String year, double value) {
-		this.country = country;
-		this.indicator = indicator;
-		this.year = year;
-		this.value = value;
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
-	public Label getCountry() {
-		return country;
+	public String getCountryName() {
+		return countryName;
 	}
 
-	public void setCountry(Label country) {
-		this.country = country;
+	public void setCountryName(String countryName) {
+		this.countryName = countryName;
 	}
 
-	public Label getIndicator() {
-		return indicator;
+	public String getCountryUri() {
+		return countryUri;
 	}
 
-	public void setIndicator(Label indicator) {
-		this.indicator = indicator;
+	public void setCountryUri(String countryUri) {
+		this.countryUri = countryUri;
+	}
+
+	public String getIndicatorName() {
+		return indicatorName;
+	}
+
+	public void setIndicatorName(String indicatorName) {
+		this.indicatorName = indicatorName;
+	}
+
+	public String getIndicatorUri() {
+		return indicatorUri;
+	}
+
+	public void setIndicatorUri(String indicatorUri) {
+		this.indicatorUri = indicatorUri;
 	}
 
 	public String getYear() {
@@ -66,9 +81,14 @@ public class Observation {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result
-				+ ((indicator == null) ? 0 : indicator.hashCode());
+				+ ((countryName == null) ? 0 : countryName.hashCode());
+		result = prime * result
+				+ ((countryUri == null) ? 0 : countryUri.hashCode());
+		result = prime * result
+				+ ((indicatorName == null) ? 0 : indicatorName.hashCode());
+		result = prime * result
+				+ ((indicatorUri == null) ? 0 : indicatorUri.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(value);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -85,15 +105,25 @@ public class Observation {
 		if (getClass() != obj.getClass())
 			return false;
 		Observation other = (Observation) obj;
-		if (country == null) {
-			if (other.country != null)
+		if (countryName == null) {
+			if (other.countryName != null)
 				return false;
-		} else if (!country.equals(other.country))
+		} else if (!countryName.equals(other.countryName))
 			return false;
-		if (indicator == null) {
-			if (other.indicator != null)
+		if (countryUri == null) {
+			if (other.countryUri != null)
 				return false;
-		} else if (!indicator.equals(other.indicator))
+		} else if (!countryUri.equals(other.countryUri))
+			return false;
+		if (indicatorName == null) {
+			if (other.indicatorName != null)
+				return false;
+		} else if (!indicatorName.equals(other.indicatorName))
+			return false;
+		if (indicatorUri == null) {
+			if (other.indicatorUri != null)
+				return false;
+		} else if (!indicatorUri.equals(other.indicatorUri))
 			return false;
 		if (Double.doubleToLongBits(value) != Double
 				.doubleToLongBits(other.value))
@@ -105,4 +135,13 @@ public class Observation {
 			return false;
 		return true;
 	}
+
+	public String getUri() {
+		return uri;
+	}
+
+	public void setUri(String uri) {
+		this.uri = uri;
+	}
+
 }

@@ -47,7 +47,6 @@
 							<property name="classesToBeBound">
 								<list>
 									<value>es.weso.model.Country</value>
-									<value>es.weso.model.Label</value>
 									<value>es.weso.model.Observation</value>
 									<value>es.weso.model.Rank</value>
 									<value>es.weso.model.RankMap</value>
