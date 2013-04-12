@@ -17,7 +17,7 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
  * @version 1.0
  * @since 27/03/2013
  */
-public class Country {
+public class Country implements LinkedDataResource {
 
 	private Label label, region;
 	private String code_iso_alpha2, code_iso_alpha3;
@@ -96,6 +96,18 @@ public class Country {
 
 	public void setObservations(Collection<Observation> observations) {
 		this.observations = observations;
+	}
+
+	public String asRDF() {
+		StringBuilder sb = new StringBuilder("<?xml version=\"1.0\"?>");
+		sb.append("<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">");
+		// TODO Auto-generated method stub
+		return sb.toString();
+	}
+
+	public String asTTL() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

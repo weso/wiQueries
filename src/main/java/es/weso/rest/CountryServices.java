@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.weso.business.CountryManagement;
 import es.weso.model.Country;
@@ -31,35 +30,30 @@ public class CountryServices {
 	}
 
 	@RequestMapping(value = "/rank/{year}/{countryCode}/{category}", method = RequestMethod.GET)
-	@ResponseBody
 	public Rank rank(@PathVariable String year,
 			@PathVariable String countryCode, @PathVariable String category) {
 		return countryManagement.getRank(category, year, countryCode);
 	}
 
 	@RequestMapping(value = "/rank/{year}/{countryCode}", method = RequestMethod.GET)
-	@ResponseBody
 	public RankMap rank(@PathVariable String year,
 			@PathVariable String countryCode) {
 		return countryManagement.getRank(year, countryCode);
 	}
 
 	@RequestMapping(value = "/observation/{year}/{countryCode}/{indicator}", method = RequestMethod.GET)
-	@ResponseBody
 	public Observation observation(@PathVariable String year,
 			@PathVariable String countryCode, @PathVariable String indicator) {
 		return countryManagement.getObservation(year, indicator, countryCode);
 	}
 
 	@RequestMapping(value = "/observation/{year}/{countryCode}", method = RequestMethod.GET)
-	@ResponseBody
 	public ObservationCollection observation(@PathVariable String year,
 			@PathVariable String countryCode) {
 		return countryManagement.getObservation(year, countryCode);
 	}
 
 	@RequestMapping(value = "/country/{year}/{countryCode}", method = RequestMethod.GET)
-	@ResponseBody
 	public Country country(@PathVariable String year,
 			@PathVariable String countryCode) {
 		return countryManagement.getCountry(year, countryCode);
