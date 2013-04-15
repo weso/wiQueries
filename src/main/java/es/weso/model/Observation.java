@@ -4,6 +4,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 
+import es.weso.annotations.LinkedDataUri;
+
 @JsonAutoDetect
 @XmlRootElement
 /**
@@ -20,6 +22,16 @@ public class Observation {
 	private String label;
 	private String countryName, countryUri, indicatorName, indicatorUri, year;
 	private double value;
+	
+
+	@LinkedDataUri
+	public String getUri() {
+		return uri;
+	}
+
+	public void setUri(String uri) {
+		this.uri = uri;
+	}
 	
 	public String getLabel() {
 		return label;
@@ -134,14 +146,6 @@ public class Observation {
 		} else if (!year.equals(other.year))
 			return false;
 		return true;
-	}
-
-	public String getUri() {
-		return uri;
-	}
-
-	public void setUri(String uri) {
-		this.uri = uri;
 	}
 
 }

@@ -3,6 +3,8 @@ package es.weso.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -16,10 +18,27 @@ import java.util.Properties;
  */
 public class Conf {
 
-	private static Properties config, queries;
+	private static Properties config, queries, prefix;
 
 	private static final String QUERIES_FILE = "queries.properties";
 	private static final String CONFIG_FILE = "config.properties";
+	private static final String PREFIX_FILE = "prefix.properties";
+
+	public static Map<String, String> getPrefixes() {
+		if (prefix == null) {
+			prefix = new Properties();
+			try {
+				prefix.load(getLocalStream(PREFIX_FILE));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		Map<String, String> prefixes = new HashMap<String, String>();
+		for (String str : prefix.stringPropertyNames()) {
+			prefixes.put(str, prefix.getProperty(str));
+		}
+		return prefixes;
+	}
 
 	/**
 	 * Gets troperties from the configuration file

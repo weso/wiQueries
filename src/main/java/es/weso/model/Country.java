@@ -13,7 +13,7 @@ import es.weso.annotations.LinkedDataUri;
 
 @JsonAutoDetect
 @XmlRootElement
-@LinkedDataEntity(type = "http://data.webfoundation.org/webindex/ontology/Country")
+@LinkedDataEntity(type = "wi-onto:Country")
 /**
  * Representation of a country
  * 
@@ -31,7 +31,7 @@ public class Country {
 	private Collection<Observation> observations;
 	private Map<String, Rank> ranks;
 
-	@LinkedDataProperty(predicate = "http://www.w3.org/2000/01/rdf-schema#label")
+	@LinkedDataProperty(predicate = "rdfs:label")
 	public String getName() {
 		return name;
 	}
@@ -57,7 +57,7 @@ public class Country {
 		this.regionName = regionName;
 	}
 
-	@LinkedDataProperty(predicate = "http://www.w3.org/2000/01/rdf-schema#label", inverse = true)
+	@LinkedDataProperty(predicate = "wi-onto:has-country", inverse = true)
 	public String getRegionUri() {
 		return regionUri;
 	}
@@ -66,7 +66,7 @@ public class Country {
 		this.regionUri = regionUri;
 	}
 
-	@LinkedDataProperty(predicate = "http://data.webfoundation.org/webindex/ontology/has-iso-alpha2-code")
+	@LinkedDataProperty(predicate = "wi-onto:has-iso-alpha2-code")
 	public String getCode_iso_alpha2() {
 		return code_iso_alpha2;
 	}
@@ -75,7 +75,7 @@ public class Country {
 		this.code_iso_alpha2 = code_iso_alpha2;
 	}
 
-	@LinkedDataProperty(predicate = "http://data.webfoundation.org/webindex/ontology/has-iso-alpha3-code")
+	@LinkedDataProperty(predicate = "wi-onto:has-iso-alpha3-code")
 	public String getCode_iso_alpha3() {
 		return code_iso_alpha3;
 	}
@@ -92,7 +92,7 @@ public class Country {
 		this.year = year;
 	}
 
-	@LinkedDataProperty(predicate = "http://www.w3.org/2003/01/geo/wgs84_pos#lat")
+	@LinkedDataProperty(predicate = "geo:lat")
 	public double getLat() {
 		return lat;
 	}
@@ -101,7 +101,7 @@ public class Country {
 		this.lat = lat;
 	}
 
-	@LinkedDataProperty(predicate = "http://www.w3.org/2003/01/geo/wgs84_pos#long")
+	@LinkedDataProperty(predicate = "geo:long")
 	public double getLon() {
 		return lon;
 	}
@@ -118,7 +118,7 @@ public class Country {
 		this.ranks = ranks;
 	}
 
-	@LinkedDataProperty(predicate = "http://data.webfoundation.org/webindex/ontology/ref-area", inverse = true)
+	@LinkedDataProperty(predicate = "wi-onto:ref-area", inverse = true)
 	public Collection<Observation> getObservations() {
 		return observations;
 	}
