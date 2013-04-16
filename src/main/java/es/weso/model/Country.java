@@ -7,8 +7,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 
+import es.weso.annotations.LinkedDataEntity;
+import es.weso.annotations.LinkedDataProperty;
+import es.weso.annotations.LinkedDataUri;
+
 @JsonAutoDetect
 @XmlRootElement
+@LinkedDataEntity(type = "wi-onto:Country")
 /**
  * Representation of a country
  * 
@@ -19,29 +24,49 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
  */
 public class Country {
 
-	private Label label, region;
-	private String code_iso_alpha2, code_iso_alpha3;
+	private String name, uri, regionName, regionUri, code_iso_alpha2,
+			code_iso_alpha3;;
 	private int year;
 	private double lat, lon;
 	private Collection<Observation> observations;
 	private Map<String, Rank> ranks;
 
-	public Label getLabel() {
-		return label;
+	@LinkedDataProperty(predicate = "rdfs:label")
+	public String getName() {
+		return name;
 	}
 
-	public void setLabel(Label label) {
-		this.label = label;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public Label getRegion() {
-		return region;
+	@LinkedDataUri
+	public String getUri() {
+		return uri;
 	}
 
-	public void setRegion(Label region) {
-		this.region = region;
+	public void setUri(String uri) {
+		this.uri = uri;
 	}
 
+	public String getRegionName() {
+		return regionName;
+	}
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
+	}
+
+	@LinkedDataProperty(predicate = "wi-onto:has-country", inverse = true)
+	public String getRegionUri() {
+		return regionUri;
+	}
+
+	public void setRegionUri(String regionUri) {
+		this.regionUri = regionUri;
+	}
+
+	@LinkedDataProperty(predicate = "wi-onto:has-iso-alpha2-code")
 	public String getCode_iso_alpha2() {
 		return code_iso_alpha2;
 	}
@@ -50,6 +75,7 @@ public class Country {
 		this.code_iso_alpha2 = code_iso_alpha2;
 	}
 
+	@LinkedDataProperty(predicate = "wi-onto:has-iso-alpha3-code")
 	public String getCode_iso_alpha3() {
 		return code_iso_alpha3;
 	}
@@ -66,6 +92,7 @@ public class Country {
 		this.year = year;
 	}
 
+	@LinkedDataProperty(predicate = "geo:lat")
 	public double getLat() {
 		return lat;
 	}
@@ -74,6 +101,7 @@ public class Country {
 		this.lat = lat;
 	}
 
+	@LinkedDataProperty(predicate = "geo:long")
 	public double getLon() {
 		return lon;
 	}
@@ -90,6 +118,7 @@ public class Country {
 		this.ranks = ranks;
 	}
 
+	@LinkedDataProperty(predicate = "wi-onto:ref-area", inverse = true)
 	public Collection<Observation> getObservations() {
 		return observations;
 	}

@@ -30,7 +30,7 @@ public class CountryTest {
 	@Test
 	public void testIsoAlpha3() {
 		Country country = cm.getCountry("2011", "ESP");
-		Assert.assertEquals("Spain", country.getLabel().getValue());
+		Assert.assertEquals("Spain", country.getName());
 		Assert.assertTrue(country.getObservations().contains(
 				cm.getObservation("2011", "ITUD", "ES")));
 		Assert.assertEquals(18, country.getRanks().get("global").getPosition());
@@ -39,7 +39,7 @@ public class CountryTest {
 	@Test
 	public void testIsoAlpha2() {
 		Country country = cm.getCountry("2011", "SE");
-		Assert.assertEquals("Sweden", country.getLabel().getValue());
+		Assert.assertEquals("Sweden", country.getName());
 		Assert.assertTrue(country.getObservations().contains(
 				cm.getObservation("2011", "ITUD", "SWE")));
 		Assert.assertEquals(1, country.getRanks().get("global").getPosition());

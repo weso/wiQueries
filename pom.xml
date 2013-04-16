@@ -17,20 +17,11 @@
 
 		<!-- Rest -->
 		<dependency>
-			<groupId>com.sun.xml.bind</groupId>
-			<artifactId>jaxb-impl</artifactId>
-			<version>2.2-EA</version>
-		</dependency>
-		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-lgpl</artifactId>
+			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.9.12</version>
 		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-lgpl</artifactId>
-			<version>1.9.12</version>
-		</dependency>
+
 
 		<!-- Spring -->
 		<dependency>
@@ -52,13 +43,13 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
-		</dependency>
+		</dependency> 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-oxm</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
-
+		
 		<!-- Logging -->
 		<dependency>
 			<groupId>log4j</groupId>
@@ -86,13 +77,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- Jackson dependencies -->
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-jaxrs</artifactId>
-			<version>1.9.9</version>
-		</dependency>
-
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -112,7 +96,7 @@
 			<artifactId>jena-arq</artifactId>
 			<version>2.10.0</version>
 		</dependency>
-		
+
 		<!-- Memcached client -->
 		<dependency>
 			<groupId>com.googlecode.xmemcached</groupId>
