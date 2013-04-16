@@ -19,18 +19,18 @@ import es.weso.annotations.LinkedDataUri;
 import es.weso.util.Conf;
 
 /**
- * A view that returns data in RDF
+ * A view that returns data in TTL
  * 
  * @author <a href="http://alejandro-montes.appspot.com">Alejandro Montes
  *         García</a>
  * @version 1.0
- * @since 12/04/2013
+ * @since 16/04/2013
  */
-public class RDFView extends AbstractView {
+public class TTLView extends AbstractView {
 
-	public static final String DEFAULT_CONTENT_TYPE = "application/rdf+xml";
+	public static final String DEFAULT_CONTENT_TYPE = "text/turtle";
 
-	public RDFView() {
+	public TTLView() {
 		setContentType(DEFAULT_CONTENT_TYPE);
 	}
 
@@ -38,33 +38,30 @@ public class RDFView extends AbstractView {
 	protected void renderMergedOutputModel(Map<String, Object> model,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		Object rdfObject = getRDFObject(model);
-		LinkedDataEntity entity = rdfObject.getClass().getAnnotation(
+		Object ttlObject = getTTLObject(model);
+		LinkedDataEntity entity = ttlObject.getClass().getAnnotation(
 				LinkedDataEntity.class);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		writePrefixes(baos);
 		if (entity != null) {
-			entityToRdf(rdfObject, entity.type(), baos);
+			entityToTTL(ttlObject, entity.type(), baos);
 		}
-		baos.write("</rdf:RDF>".getBytes());
 		writeToResponse(response, baos);
 	}
 
 	/**
-	 * Writes the prefixes to be used in the RDF
+	 * Writes the prefixes to be used in the TTL
 	 * 
 	 * @param baos
 	 *            The output stream
 	 * @throws IOException
 	 */
 	private void writePrefixes(ByteArrayOutputStream baos) throws IOException {
-		baos.write("<?xml version=\"1.0\"?>\n".getBytes());
-		baos.write("<rdf:RDF".getBytes());
 		for (Map.Entry<String, String> entry : Conf.getPrefixes().entrySet()) {
-			baos.write(("\n\txmlns:" + entry.getKey() + "=\""
-					+ entry.getValue() + "\"").getBytes());
+			baos.write(("@prefix " + entry.getKey() + ":\t<" + entry.getValue() + "> .\n")
+					.getBytes());
 		}
-		baos.write(">\n".getBytes());
+		baos.write("\n".getBytes());
 	}
 
 	/**
@@ -75,21 +72,21 @@ public class RDFView extends AbstractView {
 	 *            taking precedence over static attributes
 	 * @return The object to be written
 	 */
-	private Object getRDFObject(Map<String, Object> model) {
-		Object rdfObject = null;
+	private Object getTTLObject(Map<String, Object> model) {
+		Object TTLObject = null;
 		for (Object obj : model.values()) {
 			if (obj instanceof BindingResult) {
-				rdfObject = ((BindingResult) obj).getTarget();
+				TTLObject = ((BindingResult) obj).getTarget();
 				break;
 			}
 		}
-		return rdfObject;
+		return TTLObject;
 	}
 
 	/**
-	 * Writes the main entity to RDF
+	 * Writes the main entity to TTL
 	 * 
-	 * @param rdfObject
+	 * @param TTLObject
 	 *            The object to be written
 	 * @param type
 	 *            The type of the object to be written
@@ -99,23 +96,23 @@ public class RDFView extends AbstractView {
 	 * @throws InvocationTargetException
 	 * @throws IOException
 	 */
-	private void entityToRdf(Object rdfObject, String type,
+	private void entityToTTL(Object TTLObject, String type,
 			ByteArrayOutputStream baos) throws IllegalAccessException,
 			InvocationTargetException, IOException {
-		String uri = writeUri(rdfObject, type, baos);
-		for (Method method : rdfObject.getClass().getMethods()) {
+		String uri = writeUri(TTLObject, type, baos);
+		for (Method method : TTLObject.getClass().getMethods()) {
 			LinkedDataProperty propertyAnnotation = method
 					.getAnnotation(LinkedDataProperty.class);
-			writeProperty(rdfObject, baos, method, propertyAnnotation);
+			writeProperty(TTLObject, baos, method, propertyAnnotation);
 		}
-		baos.write((getTabs(1) + "</" + type + ">\n").getBytes());
-		writeInverseProperties(rdfObject, baos, uri);
+		baos.write(" .\n".getBytes());
+		writeInverseProperties(TTLObject, baos, uri);
 	}
 
 	/**
 	 * Writes a property of the main object
 	 * 
-	 * @param rdfObject
+	 * @param TTLObject
 	 *            The object that has the property
 	 * @param baos
 	 *            The output stream
@@ -127,22 +124,21 @@ public class RDFView extends AbstractView {
 	 * @throws InvocationTargetException
 	 * @throws IOException
 	 */
-	private void writeProperty(Object rdfObject, ByteArrayOutputStream baos,
+	private void writeProperty(Object TTLObject, ByteArrayOutputStream baos,
 			Method method, LinkedDataProperty propertyAnnotation)
 			throws IllegalAccessException, InvocationTargetException,
 			IOException {
 		if (propertyAnnotation != null && !propertyAnnotation.inverse()) {
-			String property = method.invoke(rdfObject).toString();
-			baos.write((getTabs(2) + "<" + propertyAnnotation.predicate() + ">"
-					+ property + "</" + propertyAnnotation.predicate() + ">\n")
-					.getBytes());
+			String property = method.invoke(TTLObject).toString();
+			baos.write((" ;\n\t" + propertyAnnotation.predicate() + " \""
+					+ property + "\"").getBytes());
 		}
 	}
 
 	/**
 	 * Writes the URI of an object
 	 * 
-	 * @param rdfObject
+	 * @param TTLObject
 	 *            The object to get the URI from
 	 * @param type
 	 *            The type of the object
@@ -153,17 +149,16 @@ public class RDFView extends AbstractView {
 	 * @throws InvocationTargetException
 	 * @throws IOException
 	 */
-	private String writeUri(Object rdfObject, String type,
+	private String writeUri(Object TTLObject, String type,
 			ByteArrayOutputStream baos) throws IllegalAccessException,
 			InvocationTargetException, IOException {
 		String uri = null;
-		for (Method method : rdfObject.getClass().getMethods()) {
+		for (Method method : TTLObject.getClass().getMethods()) {
 			LinkedDataUri uriAnnotation = method
 					.getAnnotation(LinkedDataUri.class);
 			if (uriAnnotation != null) {
-				uri = method.invoke(rdfObject).toString();
-				baos.write((getTabs(1) + "<" + type + " rdf:about=\"" + uri + "\">\n")
-						.getBytes());
+				uri = method.invoke(TTLObject).toString();
+				baos.write(("<" + uri + "> rdf:type " + type).getBytes());
 				break;
 			}
 		}
@@ -173,7 +168,7 @@ public class RDFView extends AbstractView {
 	/**
 	 * Writes the inverse properties of the object
 	 * 
-	 * @param rdfObject
+	 * @param TTLObject
 	 *            The object to be written
 	 * @param baos
 	 *            The output stream
@@ -183,20 +178,20 @@ public class RDFView extends AbstractView {
 	 * @throws InvocationTargetException
 	 * @throws IOException
 	 */
-	private void writeInverseProperties(Object rdfObject,
+	private void writeInverseProperties(Object TTLObject,
 			ByteArrayOutputStream baos, String uri)
 			throws IllegalAccessException, InvocationTargetException,
 			IOException {
-		for (Method method : rdfObject.getClass().getMethods()) {
+		for (Method method : TTLObject.getClass().getMethods()) {
 			LinkedDataProperty propertyAnnotation = method
 					.getAnnotation(LinkedDataProperty.class);
 			if (propertyAnnotation != null && propertyAnnotation.inverse()) {
-				Object prop = method.invoke(rdfObject);
+				Object prop = method.invoke(TTLObject);
 				if (prop instanceof String || prop.getClass().isPrimitive()) {
-					inversePropertyToRDF(baos, uri, prop.toString(),
+					inversePropertyToTTL(baos, uri, prop.toString(),
 							propertyAnnotation.predicate());
 				} else {
-					inversePropertyToRDF(baos, uri, prop,
+					inversePropertyToTTL(baos, uri, prop,
 							propertyAnnotation.predicate());
 				}
 
@@ -220,7 +215,7 @@ public class RDFView extends AbstractView {
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
 	 */
-	private void inversePropertyToRDF(ByteArrayOutputStream baos, String uri,
+	private void inversePropertyToTTL(ByteArrayOutputStream baos, String uri,
 			Object property, String predicate) throws IOException,
 			IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException {
@@ -228,12 +223,12 @@ public class RDFView extends AbstractView {
 			@SuppressWarnings("unchecked")
 			Collection<Object> properties = (Collection<Object>) property;
 			for (Object obj : properties) {
-				inversePropertyToRDF(baos, uri, obj, predicate);
+				inversePropertyToTTL(baos, uri, obj, predicate);
 			}
 		} else {
 			for (Method m : property.getClass().getMethods()) {
 				if (m.getAnnotation(LinkedDataUri.class) != null) {
-					inversePropertyToRDF(baos, uri, m.invoke(property)
+					inversePropertyToTTL(baos, uri, m.invoke(property)
 							.toString(), predicate);
 				}
 			}
@@ -252,27 +247,9 @@ public class RDFView extends AbstractView {
 	 * @param predicate
 	 *            The predicate to link the property with the object
 	 */
-	private void inversePropertyToRDF(ByteArrayOutputStream baos, String uri,
+	private void inversePropertyToTTL(ByteArrayOutputStream baos, String uri,
 			String property, String predicate) throws IOException {
-		baos.write((getTabs(1) + "<rdf:Description rdf:about=\"" + property + "\">\n")
+		baos.write(("\n<" + property + "> " + predicate + "<" + uri + "> .")
 				.getBytes());
-		baos.write((getTabs(2) + "<" + predicate + " rdf:resource=\"" + uri + "\" />\n")
-				.getBytes());
-		baos.write((getTabs(1) + "</rdf:Description>\n").getBytes());
-	}
-
-	/**
-	 * Gets a number of tabulations
-	 * 
-	 * @param n
-	 *            The amount of tabulations
-	 * @return N tabulations
-	 */
-	private String getTabs(int n) {
-		String tabulations = "";
-		for (int i = 0; i < n; i++) {
-			tabulations += "\t";
-		}
-		return tabulations;
 	}
 }

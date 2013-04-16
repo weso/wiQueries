@@ -27,6 +27,7 @@
 								<entry key="json" value="application/json" />
 								<entry key="xml" value="application/xml" />
 								<entry key="rdf" value="application/rdf+xml" />
+								<entry key="ttl" value="text/turtle" />
 							</map>
 						</constructor-arg>
 					</bean>
@@ -38,9 +39,8 @@
 			<list>
 				<bean
 					class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
-
 				<bean class="es.weso.views.RDFView" />
-
+				<bean class="es.weso.views.TTLView" />
 				<bean class="org.springframework.web.servlet.view.xml.MarshallingView">
 					<constructor-arg>
 						<bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
