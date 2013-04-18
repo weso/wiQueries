@@ -1,5 +1,7 @@
 package es.weso.business;
 
+import java.io.IOException;
+import java.nio.channels.NotYetConnectedException;
 import java.util.ArrayDeque;
 import java.util.Collection;
 
@@ -24,7 +26,13 @@ public class CountryManagement {
 	private CountryData data;
 
 	public CountryManagement() {
-		data = new CountryData();
+		try {
+			data = new CountryData();
+		} catch (IOException e) {
+			NotYetConnectedException ex = new NotYetConnectedException();
+			ex.setStackTrace(e.getStackTrace());
+			throw ex;
+		}
 	}
 
 	/**

@@ -33,9 +33,20 @@ public class JenaMemcachedClient {
 
 	private static Logger log = Logger.getLogger(JenaMemcachedClient.class);
 	private int expireTime;
+	private static JenaMemcachedClient instance;
+	private static MemcachedClient client;
+	
+	
+	public static JenaMemcachedClient create() throws IOException {
+		if(instance == null) {
+			instance = new JenaMemcachedClient();
+		}
+		return instance;
+	}
 
-	public JenaMemcachedClient() {
+	private JenaMemcachedClient() throws IOException {
 		try {
+			createClient();
 			String time = Conf.getConfig("cache.expire.time");
 			expireTime = Integer.parseInt(time);
 		} catch (NullPointerException e) {
@@ -48,6 +59,18 @@ public class JenaMemcachedClient {
 			expireTime = 2592000;
 		}
 	}
+	
+	/**
+	 * Creates a {@link MemcachedClient}
+	 * @throws IOException
+	 */
+	private void createClient() throws IOException {
+		if(client == null) {
+			MemcachedClientBuilder builder = new XMemcachedClientBuilder(
+					AddrUtil.getAddresses(Conf.getConfig("cache.server")));
+			client = builder.build();
+		}
+	}
 
 	/**
 	 * Executes a query
@@ -58,14 +81,8 @@ public class JenaMemcachedClient {
 	 */
 	public ResultSet executeQuery(String queryStr) {
 		String xmlResult;
-		MemcachedClientBuilder builder = new XMemcachedClientBuilder(
-				AddrUtil.getAddresses(Conf.getConfig("cache.server")));
 		try {
-			MemcachedClient memcachedClient = builder.build();
-			xmlResult = getResultFromCache(queryStr, memcachedClient);
-			memcachedClient.shutdown();
-		} catch (IOException e) {
-			xmlResult = treatCacheException(queryStr, e);
+			xmlResult = getResultFromCache(queryStr);
 		} catch (TimeoutException e) {
 			xmlResult = treatCacheException(queryStr, e);
 		} catch (InterruptedException e) {
@@ -81,24 +98,21 @@ public class JenaMemcachedClient {
 	 * 
 	 * @param queryStr
 	 *            The query to be performed
-	 * @param memcachedClient
-	 *            The cache client
 	 * @return The XML representation of the {@link ResultSet}
 	 * @throws TimeoutException
 	 * @throws InterruptedException
 	 * @throws MemcachedException
 	 */
-	private String getResultFromCache(String queryStr,
-			MemcachedClient memcachedClient) throws TimeoutException,
+	private String getResultFromCache(String queryStr) throws TimeoutException,
 			InterruptedException, MemcachedException {
 		String xmlResult;
 		String key = "Query" + queryStr.hashCode();
 		log.info("Trying to get " + key + " from cache");
-		xmlResult = memcachedClient.get(key);
+		xmlResult = client.get(key);
 		if (xmlResult == null) {
 			log.info(key
 					+ " was not stored in the cache, querying SPARQL endpoint");
-			xmlResult = queryEndpointAndStore(queryStr, memcachedClient, key);
+			xmlResult = queryEndpointAndStore(queryStr, key);
 		}
 		return xmlResult;
 	}
@@ -123,8 +137,6 @@ public class JenaMemcachedClient {
 	 * 
 	 * @param queryStr
 	 *            The query to be performed
-	 * @param memcachedClient
-	 *            The cache client
 	 * @param key
 	 *            The key used in the cache to store the results
 	 * @return The XML representation of the {@link ResultSet}
@@ -132,13 +144,12 @@ public class JenaMemcachedClient {
 	 * @throws InterruptedException
 	 * @throws MemcachedException
 	 */
-	private String queryEndpointAndStore(String queryStr,
-			MemcachedClient memcachedClient, String key)
+	private String queryEndpointAndStore(String queryStr, String key)
 			throws TimeoutException, InterruptedException, MemcachedException {
 		String xmlResult = "";
 		try {
 			xmlResult = queryEndpoint(queryStr);
-			memcachedClient.set(key, expireTime, xmlResult);
+			client.set(key, expireTime, xmlResult);
 		} catch (QueryException e) {
 			log.error("An error ocurred querying the endpoint. "
 					+ "The results will not be stored in the cache.", e);
@@ -168,6 +179,13 @@ public class JenaMemcachedClient {
 					"ResultSet was empty. Check your query:\n" + queryStr);
 		}
 		return ResultSetFormatter.asXMLString(rs);
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		client.shutdown();
+		client = null;
+		super.finalize();
 	}
 
 }

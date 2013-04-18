@@ -13,14 +13,14 @@ import es.weso.model.Rank;
 import es.weso.model.RankMap;
 
 /**
- * Class to map services that will compare {@link Country countries}
+ * Class to map services that get data of {@link Country countries}
  * 
  * @author <a href="http://alejandro-montes.appspot.com">Alejandro Montes
  *         García</a>
  * @version 1.0
  * @since 27/03/2013
  */
-@Controller
+@Controller(value="/single")
 public class CountryServices {
 
 	private CountryManagement countryManagement;

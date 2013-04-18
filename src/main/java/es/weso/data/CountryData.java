@@ -1,5 +1,6 @@
 package es.weso.data;
 
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.HashSet;
@@ -28,8 +29,8 @@ public class CountryData {
 
 	private JenaMemcachedClient client;
 
-	public CountryData() {
-		client = new JenaMemcachedClient();
+	public CountryData() throws IOException {
+		client = JenaMemcachedClient.create();
 	}
 
 	/**
