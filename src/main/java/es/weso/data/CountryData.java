@@ -152,22 +152,13 @@ public class CountryData {
 	 * @return A {@link Country} without observations and ranks
 	 */
 	public Country getCountryData(String countryCode) {
-		Country country = new Country();
 		ResultSet rs = client.executeQuery(Conf.getQuery("country.data",
 				countryCode));
 		try {
-			QuerySolution qs = rs.next();
-			country.setCode_iso_alpha3(qs.getLiteral("id").getString());
-			country.setName(qs.getLiteral("name").getString());
-			country.setUri(qs.getResource("country").getURI());
-			country.setLat(qs.getLiteral("lat").getDouble());
-			country.setLon(qs.getLiteral("lon").getDouble());
-			country.setRegionName(qs.getLiteral("regionName").getString());
-			country.setRegionUri(qs.getResource("region").getURI());
+			return querySolutionToCountry(rs.next());
 		} catch (NoSuchElementException e) {
 			throw new IllegalArgumentException("Invalid countryCode", e);
 		}
-		return country;
 	}
 
 	/**
@@ -183,6 +174,23 @@ public class CountryData {
 			indicators.add(qs.getLiteral("name").getString());
 		}
 		return indicators;
+	}
+
+	/**
+	 * Gets the data of all the {@link Country countries} in a region
+	 * 
+	 * @param regionName
+	 *            The name of the region
+	 * @return All the {@link Country countries} in that region
+	 */
+	public Collection<Country> getRegionCountries(String regionName) {
+		Collection<Country> countries = new HashSet<Country>();
+		ResultSet rs = client.executeQuery(Conf.getQuery("countries.region",
+				regionName));
+		while (rs.hasNext()) {
+			countries.add(querySolutionToCountry(rs.next()));
+		}
+		return countries;
 	}
 
 	/**
@@ -203,6 +211,26 @@ public class CountryData {
 		obs.setUri(qs.getResource("obs").getURI());
 		obs.setLabel(qs.getLiteral("label").getString());
 		return obs;
+	}
+
+	/**
+	 * Converts a {@link QuerySolution} into a {@link Country}
+	 * 
+	 * @param qs
+	 *            The {@link QuerySolution} to be converted
+	 * @return The resulting {@link Country}
+	 */
+	private Country querySolutionToCountry(QuerySolution qs) {
+		Country country = new Country();
+		country.setCode_iso_alpha3(qs.getLiteral("isoCode3").getString());
+		country.setCode_iso_alpha2(qs.getLiteral("isoCode2").getString());
+		country.setName(qs.getLiteral("name").getString());
+		country.setUri(qs.getResource("country").getURI());
+		country.setLat(qs.getLiteral("lat").getDouble());
+		country.setLon(qs.getLiteral("lon").getDouble());
+		country.setRegionName(qs.getLiteral("regionName").getString());
+		country.setRegionUri(qs.getResource("region").getURI());
+		return country;
 	}
 
 	/**

@@ -1,5 +1,8 @@
 package es.weso.wirouter.year;
 
+import java.util.Collection;
+import java.util.Collections;
+
 
 public class SingleYear extends YearExpr {
 	private final Integer year;
@@ -9,6 +12,11 @@ public class SingleYear extends YearExpr {
 	
 	@Override public String toString() {
 		return year.toString();
+	}
+
+	@Override
+	public Collection<String> getYears() {
+		return Collections.singleton(year.toString());
 	}
 	
 }

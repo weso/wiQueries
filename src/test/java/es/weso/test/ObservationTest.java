@@ -38,13 +38,7 @@ public class ObservationTest {
 		Assert.assertEquals(9.0, seQ9ab2011.getValue());
 		Assert.assertEquals("2011", seQ9ab2011.getYear());
 		Assert.assertEquals("SE", seQ9ab2011.getCountryName());
-		Assert.assertEquals(
-				"http://data.webfoundation.org/webindex/area/country/SWE",
-				seQ9ab2011.getCountryUri());
 		Assert.assertEquals("Q9ab", seQ9ab2011.getIndicatorName());
-		Assert.assertEquals(
-				"http://data.webfoundation.org/webindex/indicator/Q9ab",
-				seQ9ab2011.getIndicatorUri());
 	}
 
 	@Test
@@ -53,12 +47,6 @@ public class ObservationTest {
 		Assert.assertEquals(114.233016778964, esItud2011.getValue());
 		Assert.assertEquals("2011", esItud2011.getYear());
 		Assert.assertEquals("ES", esItud2011.getCountryName());
-		Assert.assertEquals(
-				"http://data.webfoundation.org/webindex/area/country/ESP",
-				esItud2011.getCountryUri());
 		Assert.assertEquals("ITUD", esItud2011.getIndicatorName());
-		Assert.assertEquals(
-				"http://data.webfoundation.org/webindex/indicator/ITUD",
-				esItud2011.getIndicatorUri());
 	}
 }

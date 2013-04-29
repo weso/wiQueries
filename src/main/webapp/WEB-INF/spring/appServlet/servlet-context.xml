@@ -13,6 +13,9 @@
 	<context:component-scan base-package="es.weso.rest" />
 
 	<mvc:annotation-driven />
+	<mvc:interceptors>
+		<bean class="es.weso.interceptor.NiceURIInterceptor" />
+	</mvc:interceptors>
 
 	<bean
 		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
@@ -51,6 +54,7 @@
 									<value>es.weso.model.Rank</value>
 									<value>es.weso.model.RankMap</value>
 									<value>es.weso.model.ObservationCollection</value>
+									<value>es.weso.model.CountryCollection</value>
 								</list>
 							</property>
 						</bean>

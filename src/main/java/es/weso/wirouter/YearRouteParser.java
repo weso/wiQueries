@@ -11,15 +11,15 @@ import es.weso.wirouter.year.YearExpr;
 
 public class YearRouteParser {
 
-	// Small grammar 
-    String year = "\\d+";
-    String range  = "range\\(((\\d+)-(\\d+))\\)";
+	// Small grammar
+	String year = "\\d+";
+	String range = "range\\(((\\d+)-(\\d+))\\)";
 
-    String yearExpr = "(" + range + "|" + year + ")";
+	String yearExpr = "(" + range + "|" + year + ")";
 
-    String yearExprList = yearExpr + "(," + yearExpr + ")*" ;
+	String yearExprList = yearExpr + "(," + yearExpr + ")*";
 
-	public List<YearExpr> parseRoute(String s) throws Exception {
+	public List<YearExpr> parseRoute(String s) {
 		if (s.matches(yearExprList)) {
 			List<YearExpr> list = new ArrayList<YearExpr>();
 			Matcher m = Pattern.compile(yearExpr).matcher(s);
@@ -29,31 +29,32 @@ public class YearRouteParser {
 				list.add(c);
 			}
 			return list;
-		} else
-			throw new WIRouteException("Cannot parse year expression: " + s);
+		} else {
+			throw new IllegalArgumentException("Cannot parse year expression: "
+					+ s);
+		}
 	}
-	
-	YearExpr parseYearExpr(String s) throws WIRouteException {
+
+	YearExpr parseYearExpr(String s) {
 		YearExpr e;
-		if (s.matches(range)) 
+		if (s.matches(range))
 			e = extractRange(s);
-		else 
+		else
 			e = extractYear(s);
 		return e;
 	}
-	
-    RangeYear extractRange(String s) throws WIRouteException {
-        Matcher m = Pattern.compile(range).matcher(s);
-        m.find();
-        Integer startYear = Integer.parseInt(m.group(2));
-        Integer endYear = Integer.parseInt(m.group(3));
-    	return new RangeYear(startYear,endYear);
-    }
 
-    SingleYear extractYear(String s) {
-    	Integer year = Integer.parseInt(s);
-    	return new SingleYear(year);
-    }
-    
-    
+	RangeYear extractRange(String s) {
+		Matcher m = Pattern.compile(range).matcher(s);
+		m.find();
+		Integer startYear = Integer.parseInt(m.group(2));
+		Integer endYear = Integer.parseInt(m.group(3));
+		return new RangeYear(startYear, endYear);
+	}
+
+	SingleYear extractYear(String s) {
+		Integer year = Integer.parseInt(s);
+		return new SingleYear(year);
+	}
+
 }

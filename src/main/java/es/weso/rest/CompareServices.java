@@ -1,9 +1,13 @@
 package es.weso.rest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import es.weso.business.CountryManagement;
+import es.weso.business.ComparisonManagement;
 import es.weso.model.Country;
+import es.weso.model.ObservationCollection;
 
 /**
  * Class to map services that will compare {@link Country countries}
@@ -13,12 +17,22 @@ import es.weso.model.Country;
  * @version 1.0
  * @since 27/03/2013
  */
-@Controller(value="/compare")
+@Controller
+@RequestMapping("/compare")
 public class CompareServices {
 
-	private CountryManagement countryManagement;
+	private ComparisonManagement comparisonManager;
 
 	public CompareServices() {
-		countryManagement = new CountryManagement();
+		comparisonManager = new ComparisonManagement();
+	}
+
+	@RequestMapping(value = "/{years}/{countryCodes}/{categories}", method = RequestMethod.GET)
+	public ObservationCollection compareCountries(@PathVariable String years,
+			@PathVariable String countryCodes, @PathVariable String categories) {
+		ObservationCollection oc = new ObservationCollection();
+		oc.setObservations(comparisonManager.compareCountries(years,
+				countryCodes, categories));
+		return oc;
 	}
 }

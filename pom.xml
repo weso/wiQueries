@@ -106,6 +106,6 @@
 	</dependencies>
 
 	<build>
-		<finalName>Comparator</finalName>
+		<finalName>webindex</finalName>
 	</build>
 </project>

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import es.weso.wirouter.country.CountryExpr;
 import es.weso.wirouter.country.CountryCode;
+import es.weso.wirouter.country.CountryExpr;
 import es.weso.wirouter.country.Grouping;
 import es.weso.wirouter.country.NamedRegion;
 
@@ -24,7 +24,7 @@ public class CountryRouteParser {
 
     String comparableItemList = comparableItem + "(," + comparableItem + ")*" ;
 
-	public List<CountryExpr> parseRoute(String s) throws Exception {
+	public List<CountryExpr> parseRoute(String s) {
 		if (s.matches(comparableItemList)) {
 			List<CountryExpr> list = new ArrayList<CountryExpr>();
 			Matcher m = Pattern.compile(comparableItem).matcher(s);
@@ -34,8 +34,9 @@ public class CountryRouteParser {
 				list.add(c);
 			}
 			return list;
-		} else
-			throw new Exception("Cannot parse route");
+		} else {
+			throw new IllegalArgumentException("Cannot parse route");
+		}
 	}
 	
 	CountryExpr parseItem(String s) {

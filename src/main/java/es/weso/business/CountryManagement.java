@@ -145,6 +145,17 @@ public class CountryManagement {
 		}
 		return data.getObservations(years, indicators, isoAlpha2Codes);
 	}
+	
+	/**
+	 * Gets the data of all the {@link Country countries} in a region
+	 * 
+	 * @param regionName
+	 *            The name of the region
+	 * @return All the {@link Country countries} in that region
+	 */
+	public Collection<Country> getRegionCountries(String regionName) {
+		return data.getRegionCountries(regionName);
+	}
 
 	/**
 	 * Gets a {@link Country} with {@link Observation}s and {@link Rank}s in a
