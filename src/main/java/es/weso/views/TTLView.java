@@ -2,19 +2,21 @@ package es.weso.views;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.view.AbstractView;
+
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.rdf.model.Literal;
 
 import es.weso.annotations.LinkedDataEntity;
-import es.weso.annotations.LinkedDataProperty;
 import es.weso.annotations.LinkedDataUri;
 import es.weso.util.Conf;
 
@@ -26,7 +28,7 @@ import es.weso.util.Conf;
  * @version 1.0
  * @since 16/04/2013
  */
-public class TTLView extends AbstractView {
+public class TTLView extends AbstractLinkedDataView {
 
 	public static final String DEFAULT_CONTENT_TYPE = "text/turtle";
 
@@ -99,39 +101,68 @@ public class TTLView extends AbstractView {
 	private void entityToTTL(Object TTLObject, String type,
 			ByteArrayOutputStream baos) throws IllegalAccessException,
 			InvocationTargetException, IOException {
-		String uri = writeUri(TTLObject, type, baos);
-		for (Method method : TTLObject.getClass().getMethods()) {
-			LinkedDataProperty propertyAnnotation = method
-					.getAnnotation(LinkedDataProperty.class);
-			writeProperty(TTLObject, baos, method, propertyAnnotation);
-		}
+		String uri = writeUri(TTLObject, baos);
+		writeProperties(baos, uri);
 		baos.write(" .\n".getBytes());
-		writeInverseProperties(TTLObject, baos, uri);
+		writeInverseProperties(baos, uri);
 	}
 
 	/**
-	 * Writes a property of the main object
+	 * Write the inverse properties of the entity
 	 * 
-	 * @param TTLObject
-	 *            The object that has the property
 	 * @param baos
 	 *            The output stream
-	 * @param method
-	 *            The method to invoke on the object to get the property
-	 * @param propertyAnnotation
-	 *            The annotation that tags the property
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
+	 * @param uri
+	 *            The uri of the entity
 	 * @throws IOException
 	 */
-	private void writeProperty(Object TTLObject, ByteArrayOutputStream baos,
-			Method method, LinkedDataProperty propertyAnnotation)
-			throws IllegalAccessException, InvocationTargetException,
-			IOException {
-		if (propertyAnnotation != null && !propertyAnnotation.inverse()) {
-			String property = method.invoke(TTLObject).toString();
-			baos.write((" ;\n\t" + propertyAnnotation.predicate() + " \""
-					+ property + "\"").getBytes());
+	private void writeInverseProperties(ByteArrayOutputStream baos, String uri)
+			throws IOException, UnsupportedEncodingException {
+		ResultSet rs = getInverseProperties(uri);
+		while (rs.hasNext()) {
+			QuerySolution qs = rs.next();
+			baos.write(("\n<" + qs.getResource("s").toString()).getBytes());
+			baos.write(("> " + getResource(qs, "p") + " <").getBytes());
+			baos.write(uri.getBytes());
+			baos.write("> .".getBytes());
+		}
+	}
+
+	/**
+	 * Write the properties of the entity
+	 * 
+	 * @param baos
+	 *            The output stream
+	 * @param uri
+	 *            The uri of the entity
+	 * @throws IOException
+	 */
+	private void writeProperties(ByteArrayOutputStream baos, String uri)
+			throws IOException {
+		ResultSet rs = getDirectProperties(uri);
+		boolean first = true;
+		while (rs.hasNext()) {
+			QuerySolution qs = rs.next();
+			if (first) {
+				first = false;
+			} else {
+				baos.write(";".getBytes());
+			}
+			baos.write(("\n\t" + getResource(qs, "p")).getBytes());
+			baos.write((" " + getLiteral(qs, "l")).getBytes("UTF-8"));
+			writeLangTag(qs, "lang", baos);
+		}
+	}
+
+	@Override
+	protected void writeLangTag(QuerySolution qs, String varName,
+			ByteArrayOutputStream baos) throws IOException {
+		Literal l = qs.getLiteral(varName);
+		if (l != null) {
+			String lang = l.getString();
+			if (lang != null && !lang.trim().isEmpty()) {
+				baos.write(("@" + lang).getBytes());
+			}
 		}
 	}
 
@@ -149,107 +180,28 @@ public class TTLView extends AbstractView {
 	 * @throws InvocationTargetException
 	 * @throws IOException
 	 */
-	private String writeUri(Object TTLObject, String type,
-			ByteArrayOutputStream baos) throws IllegalAccessException,
-			InvocationTargetException, IOException {
+	private String writeUri(Object TTLObject, ByteArrayOutputStream baos)
+			throws IllegalAccessException, InvocationTargetException,
+			IOException {
 		String uri = null;
 		for (Method method : TTLObject.getClass().getMethods()) {
 			LinkedDataUri uriAnnotation = method
 					.getAnnotation(LinkedDataUri.class);
 			if (uriAnnotation != null) {
 				uri = method.invoke(TTLObject).toString();
-				baos.write(("<" + uri + "> rdf:type " + type).getBytes());
+				baos.write(("<" + uri + ">").getBytes());
 				break;
 			}
 		}
 		return uri;
 	}
 
-	/**
-	 * Writes the inverse properties of the object
-	 * 
-	 * @param TTLObject
-	 *            The object to be written
-	 * @param baos
-	 *            The output stream
-	 * @param uri
-	 *            The uri of the object
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 * @throws IOException
-	 */
-	private void writeInverseProperties(Object TTLObject,
-			ByteArrayOutputStream baos, String uri)
-			throws IllegalAccessException, InvocationTargetException,
-			IOException {
-		for (Method method : TTLObject.getClass().getMethods()) {
-			LinkedDataProperty propertyAnnotation = method
-					.getAnnotation(LinkedDataProperty.class);
-			if (propertyAnnotation != null && propertyAnnotation.inverse()) {
-				Object prop = method.invoke(TTLObject);
-				if (prop instanceof String || prop.getClass().isPrimitive()) {
-					inversePropertyToTTL(baos, uri, prop.toString(),
-							propertyAnnotation.predicate());
-				} else {
-					inversePropertyToTTL(baos, uri, prop,
-							propertyAnnotation.predicate());
-				}
-
-			}
+	@Override
+	protected String getLiteral(QuerySolution qs, String varName) {
+		try {
+			return "\"" + qs.getLiteral(varName).getString() + "\"";
+		} catch (ClassCastException e) {
+			return "<" + qs.getResource(varName).toString() + ">";
 		}
-	}
-
-	/**
-	 * Writes an inverse property when this is not a primitive type or a string
-	 * 
-	 * @param baos
-	 *            The output stream
-	 * @param uri
-	 *            The URI of the father object
-	 * @param property
-	 *            The property to be written
-	 * @param predicate
-	 *            The predicate to link the property with the object
-	 * @throws IOException
-	 * @throws IllegalAccessException
-	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
-	 */
-	private void inversePropertyToTTL(ByteArrayOutputStream baos, String uri,
-			Object property, String predicate) throws IOException,
-			IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException {
-		if (property instanceof Collection) {
-			@SuppressWarnings("unchecked")
-			Collection<Object> properties = (Collection<Object>) property;
-			for (Object obj : properties) {
-				inversePropertyToTTL(baos, uri, obj, predicate);
-			}
-		} else {
-			for (Method m : property.getClass().getMethods()) {
-				if (m.getAnnotation(LinkedDataUri.class) != null) {
-					inversePropertyToTTL(baos, uri, m.invoke(property)
-							.toString(), predicate);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Writes an inverse property when this is can be represented as a string
-	 * 
-	 * @param baos
-	 *            The output stream
-	 * @param uri
-	 *            The URI of the father object
-	 * @param property
-	 *            The property to be written
-	 * @param predicate
-	 *            The predicate to link the property with the object
-	 */
-	private void inversePropertyToTTL(ByteArrayOutputStream baos, String uri,
-			String property, String predicate) throws IOException {
-		baos.write(("\n<" + property + "> " + predicate + "<" + uri + "> .")
-				.getBytes());
 	}
 }

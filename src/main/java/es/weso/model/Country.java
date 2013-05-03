@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 import es.weso.annotations.LinkedDataEntity;
-import es.weso.annotations.LinkedDataProperty;
 import es.weso.annotations.LinkedDataUri;
 
 @JsonAutoDetect
@@ -25,13 +24,12 @@ import es.weso.annotations.LinkedDataUri;
 public class Country {
 
 	private String name, uri, regionName, regionUri, code_iso_alpha2,
-			code_iso_alpha3;;
+			code_iso_alpha3;
 	private int year;
 	private double lat, lon;
 	private Collection<Observation> observations;
 	private Map<String, Rank> ranks;
 
-	@LinkedDataProperty(predicate = "rdfs:label")
 	public String getName() {
 		return name;
 	}
@@ -57,7 +55,6 @@ public class Country {
 		this.regionName = regionName;
 	}
 
-	@LinkedDataProperty(predicate = "wi-onto:has-country", inverse = true)
 	public String getRegionUri() {
 		return regionUri;
 	}
@@ -66,7 +63,6 @@ public class Country {
 		this.regionUri = regionUri;
 	}
 
-	@LinkedDataProperty(predicate = "wi-onto:has-iso-alpha2-code")
 	public String getCode_iso_alpha2() {
 		return code_iso_alpha2;
 	}
@@ -75,7 +71,6 @@ public class Country {
 		this.code_iso_alpha2 = code_iso_alpha2;
 	}
 
-	@LinkedDataProperty(predicate = "wi-onto:has-iso-alpha3-code")
 	public String getCode_iso_alpha3() {
 		return code_iso_alpha3;
 	}
@@ -92,7 +87,6 @@ public class Country {
 		this.year = year;
 	}
 
-	@LinkedDataProperty(predicate = "geo:lat")
 	public double getLat() {
 		return lat;
 	}
@@ -101,7 +95,6 @@ public class Country {
 		this.lat = lat;
 	}
 
-	@LinkedDataProperty(predicate = "geo:long")
 	public double getLon() {
 		return lon;
 	}
@@ -118,7 +111,6 @@ public class Country {
 		this.ranks = ranks;
 	}
 
-	@LinkedDataProperty(predicate = "wi-onto:ref-area", inverse = true)
 	public Collection<Observation> getObservations() {
 		return observations;
 	}

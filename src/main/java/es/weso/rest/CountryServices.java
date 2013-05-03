@@ -29,31 +29,31 @@ public class CountryServices {
 		countryManagement = new CountryManagement();
 	}
 
-	@RequestMapping(value = "/version{year}/rank/{countryCode}/{category}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{year}/rank/{countryCode}/{category}", method = RequestMethod.GET)
 	public Rank rank(@PathVariable String year,
 			@PathVariable String countryCode, @PathVariable String category) {
 		return countryManagement.getRank(category, year, countryCode);
 	}
 
-	@RequestMapping(value = "/version{year}/rank/{countryCode}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{year}/rank/{countryCode}", method = RequestMethod.GET)
 	public RankMap rank(@PathVariable String year,
 			@PathVariable String countryCode) {
 		return countryManagement.getRank(year, countryCode);
 	}
 
-	@RequestMapping(value = "/version{year}/observation/{countryCode}/{indicator}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{year}/observation/{countryCode}/{indicator}", method = RequestMethod.GET)
 	public Observation observation(@PathVariable String year,
 			@PathVariable String countryCode, @PathVariable String indicator) {
 		return countryManagement.getObservation(year, indicator, countryCode);
 	}
 
-	@RequestMapping(value = "/version{year}/observation/{countryCode}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{year}/observation/{countryCode}", method = RequestMethod.GET)
 	public ObservationCollection observation(@PathVariable String year,
 			@PathVariable String countryCode) {
 		return countryManagement.getObservation(year, countryCode);
 	}
 
-	@RequestMapping(value = "/version{year}/country/{countryCode}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{year}/country/{countryCode}", method = RequestMethod.GET)
 	public Country country(@PathVariable String year,
 			@PathVariable String countryCode) {
 		return countryManagement.getCountry(year, countryCode);
