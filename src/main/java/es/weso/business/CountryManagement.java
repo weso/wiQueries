@@ -8,7 +8,6 @@ import java.util.Collection;
 import es.weso.data.CountryData;
 import es.weso.model.Country;
 import es.weso.model.Observation;
-import es.weso.model.ObservationCollection;
 import es.weso.model.Rank;
 import es.weso.model.RankMap;
 import es.weso.util.Conf;
@@ -108,12 +107,11 @@ public class CountryManagement {
 	 *            be checked
 	 * @return The {@link Observation}s of a {@link Country} in a specific year
 	 */
-	public ObservationCollection getObservation(String year, String countryCode) {
+	public Collection<Observation> getObservation(String year,
+			String countryCode) {
 		checkValidYear(year);
 		countryCode = checkValidCountryCode(countryCode);
-		ObservationCollection obs = new ObservationCollection();
-		obs.setObservations(data.getObservation(year, countryCode));
-		return obs;
+		return data.getObservation(year, countryCode);
 	}
 
 	/**
@@ -145,7 +143,7 @@ public class CountryManagement {
 		}
 		return data.getObservations(years, indicators, isoAlpha2Codes);
 	}
-	
+
 	/**
 	 * Gets the data of all the {@link Country countries} in a region
 	 * 
@@ -172,8 +170,7 @@ public class CountryManagement {
 		checkValidYear(year);
 		countryCode = checkValidCountryCode(countryCode);
 		Country country = data.getCountryData(countryCode);
-		country.setObservations(getObservation(year, countryCode)
-				.getObservations());
+		country.setObservations(getObservation(year, countryCode));
 		country.setRanks(getRank(year, countryCode).getData());
 		country.setCode_iso_alpha2(countryCode);
 		country.setYear(Integer.parseInt(year));

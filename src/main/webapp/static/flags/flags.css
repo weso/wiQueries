@@ -1,0 +1,67 @@
+.flag {
+	width: 128px;
+	height: 87px;
+	background:url(flags.png) no-repeat
+}
+
+.flag.flag-ar {background-position: -128px 0}
+.flag.flag-au {background-position: -256px 0}
+.flag.flag-bd {background-position: -384px 0}
+.flag.flag-bf {background-position: -512px 0}
+.flag.flag-bj {background-position: -640px 0}
+.flag.flag-br {background-position: -768px 0}
+.flag.flag-ca {background-position: -896px 0}
+.flag.flag-ch {background-position: 0 -87px}
+.flag.flag-cl {background-position: -128px -87px}
+.flag.flag-cm {background-position: -256px -87px}
+.flag.flag-cn {background-position: -384px -87px}
+.flag.flag-co {background-position: -512px -87px}
+.flag.flag-de {background-position: -640px -87px}
+.flag.flag-ec {background-position: -768px -87px}
+.flag.flag-eg {background-position: -896px -87px}
+.flag.flag-es {background-position: 0 -174px}
+.flag.flag-et {background-position: -128px -174px}
+.flag.flag-fi {background-position: -256px -174px}
+.flag.flag-fr {background-position: -384px -174px}
+.flag.flag-gb {background-position: -512px -174px}
+.flag.flag-gh {background-position: -640px -174px}
+.flag.flag-ie {background-position: -768px -174px}
+.flag.flag-il {background-position: -896px -174px}
+.flag.flag-in {background-position: 0 -261px}
+.flag.flag-is {background-position: -128px -261px}
+.flag.flag-it {background-position: -256px -261px}
+.flag.flag-jo {background-position: -384px -261px}
+.flag.flag-jp {background-position: -512px -261px}
+.flag.flag-ke {background-position: -640px -261px}
+.flag.flag-kr {background-position: -768px -261px}
+.flag.flag-kz {background-position: -896px -261px}
+.flag.flag-ma {background-position: 0 -348px}
+.flag.flag-ml {background-position: -128px -348px}
+.flag.flag-mu {background-position: -256px -348px}
+.flag.flag-mx {background-position: -384px -348px}
+.flag.flag-na {background-position: -512px -348px}
+.flag.flag-ng {background-position: -640px -348px}
+.flag.flag-no {background-position: -768px -348px}
+.flag.flag-np {background-position: -896px -348px}
+.flag.flag-nz {background-position: 0 -435px}
+.flag.flag-ph {background-position: -128px -435px}
+.flag.flag-pk {background-position: -256px -435px}
+.flag.flag-pl {background-position: -384px -435px}
+.flag.flag-pt {background-position: -512px -435px}
+.flag.flag-qa {background-position: -640px -435px}
+.flag.flag-ru {background-position: -768px -435px}
+.flag.flag-se {background-position: -896px -435px}
+.flag.flag-sg {background-position: 0 -522px}
+.flag.flag-sn {background-position: -128px -522px}
+.flag.flag-th {background-position: -256px -522px}
+.flag.flag-tn {background-position: -384px -522px}
+.flag.flag-tr {background-position: -512px -522px}
+.flag.flag-tz {background-position: -640px -522px}
+.flag.flag-ug {background-position: -768px -522px}
+.flag.flag-us {background-position: -896px -522px}
+.flag.flag-id {background-position: 0 -609px}
+.flag.flag-ve {background-position: -128px -609px}
+.flag.flag-vn {background-position: -256px -609px}
+.flag.flag-ye {background-position: -384px -609px}
+.flag.flag-za {background-position: -512px -609px}
+.flag.flag-zw {background-position: -640px -609px}

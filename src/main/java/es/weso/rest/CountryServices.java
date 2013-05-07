@@ -1,16 +1,14 @@
 package es.weso.rest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import es.weso.business.CountryManagement;
 import es.weso.model.Country;
-import es.weso.model.Observation;
 import es.weso.model.ObservationCollection;
-import es.weso.model.Rank;
-import es.weso.model.RankMap;
 
 /**
  * Class to map services that get data of {@link Country countries}
@@ -29,33 +27,42 @@ public class CountryServices {
 		countryManagement = new CountryManagement();
 	}
 
-	@RequestMapping(value = "/{year}/rank/{countryCode}/{category}", method = RequestMethod.GET)
-	public Rank rank(@PathVariable String year,
-			@PathVariable String countryCode, @PathVariable String category) {
-		return countryManagement.getRank(category, year, countryCode);
+	@RequestMapping(value = "/rank/{year}/{countryCode}/{category}", method = RequestMethod.GET)
+	public String rank(@PathVariable String year,
+			@PathVariable String countryCode, @PathVariable String category, ModelMap map) {
+		map.addAttribute(countryManagement.getRank(category, year, countryCode));
+		return "rank";
 	}
 
-	@RequestMapping(value = "/{year}/rank/{countryCode}", method = RequestMethod.GET)
-	public RankMap rank(@PathVariable String year,
-			@PathVariable String countryCode) {
-		return countryManagement.getRank(year, countryCode);
+	@RequestMapping(value = "/rank/{year}/{countryCode}", method = RequestMethod.GET)
+	public String rank(@PathVariable String year,
+			@PathVariable String countryCode, ModelMap model) {
+		model.addAttribute(countryManagement.getRank(year, countryCode));
+		return "ranks";
 	}
 
-	@RequestMapping(value = "/{year}/observation/{countryCode}/{indicator}", method = RequestMethod.GET)
-	public Observation observation(@PathVariable String year,
-			@PathVariable String countryCode, @PathVariable String indicator) {
-		return countryManagement.getObservation(year, indicator, countryCode);
+	@RequestMapping(value = "/observation/{year}/{countryCode}/{indicator}", method = RequestMethod.GET)
+	public String observation(@PathVariable String year,
+			@PathVariable String countryCode, @PathVariable String indicator,
+			ModelMap model) {
+		model.addAttribute(countryManagement.getObservation(year, indicator,
+				countryCode));
+		return "observation";
 	}
 
-	@RequestMapping(value = "/{year}/observation/{countryCode}", method = RequestMethod.GET)
-	public ObservationCollection observation(@PathVariable String year,
-			@PathVariable String countryCode) {
-		return countryManagement.getObservation(year, countryCode);
+	@RequestMapping(value = "/observation/{year}/{countryCode}", method = RequestMethod.GET)
+	public String observation(@PathVariable String year,
+			@PathVariable String countryCode, ModelMap model) {
+		ObservationCollection oc = new ObservationCollection();
+		oc.setObservations(countryManagement.getObservation(year, countryCode));
+		model.addAttribute(oc);
+		return "observations";
 	}
 
-	@RequestMapping(value = "/{year}/country/{countryCode}", method = RequestMethod.GET)
-	public Country country(@PathVariable String year,
-			@PathVariable String countryCode) {
-		return countryManagement.getCountry(year, countryCode);
+	@RequestMapping(value = "/country/{year}/{countryCode}", method = RequestMethod.GET)
+	public String country(@PathVariable String year,
+			@PathVariable String countryCode, ModelMap model) {
+		model.addAttribute(countryManagement.getCountry(year, countryCode));
+		return "country";
 	}
 }
