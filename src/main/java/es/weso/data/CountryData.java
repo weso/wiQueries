@@ -25,9 +25,7 @@ import es.weso.util.JenaMemcachedClient;
  * @version 1.0
  * @since 27/03/2013
  */
-public class CountryData {
-
-	private JenaMemcachedClient client;
+public class CountryData extends AbstractDataClient {
 
 	public CountryData() throws IOException {
 		client = JenaMemcachedClient.create();
@@ -174,63 +172,6 @@ public class CountryData {
 			indicators.add(qs.getLiteral("name").getString());
 		}
 		return indicators;
-	}
-
-	/**
-	 * Gets the data of all the {@link Country countries} in a region
-	 * 
-	 * @param regionName
-	 *            The name of the region
-	 * @return All the {@link Country countries} in that region
-	 */
-	public Collection<Country> getRegionCountries(String regionName) {
-		Collection<Country> countries = new HashSet<Country>();
-		ResultSet rs = client.executeQuery(Conf.getQuery("countries.region",
-				regionName));
-		while (rs.hasNext()) {
-			countries.add(querySolutionToCountry(rs.next()));
-		}
-		return countries;
-	}
-
-	/**
-	 * Converts a {@link QuerySolution} into an {@link Observation}
-	 * 
-	 * @param qs
-	 *            The {@link QuerySolution} to be converted
-	 * @return The resulting {@link Observation}
-	 */
-	private Observation querySolutionToObservation(QuerySolution qs) {
-		Observation obs = new Observation();
-		obs.setCountryName(qs.getLiteral("code").getString());
-		obs.setCountryUri(qs.getResource("country").getURI());
-		obs.setIndicatorName(qs.getLiteral("indicatorLabel").getString());
-		obs.setIndicatorUri(qs.getResource("indicator").getURI());
-		obs.setValue(qs.getLiteral("value").getDouble());
-		obs.setYear(qs.getLiteral("year").getString());
-		obs.setUri(qs.getResource("obs").getURI());
-		obs.setLabel(qs.getLiteral("label").getString());
-		return obs;
-	}
-
-	/**
-	 * Converts a {@link QuerySolution} into a {@link Country}
-	 * 
-	 * @param qs
-	 *            The {@link QuerySolution} to be converted
-	 * @return The resulting {@link Country}
-	 */
-	private Country querySolutionToCountry(QuerySolution qs) {
-		Country country = new Country();
-		country.setCode_iso_alpha3(qs.getLiteral("isoCode3").getString());
-		country.setCode_iso_alpha2(qs.getLiteral("isoCode2").getString());
-		country.setName(qs.getLiteral("name").getString());
-		country.setUri(qs.getResource("country").getURI());
-		country.setLat(qs.getLiteral("lat").getDouble());
-		country.setLon(qs.getLiteral("lon").getDouble());
-		country.setRegionName(qs.getLiteral("regionName").getString());
-		country.setRegionUri(qs.getResource("region").getURI());
-		return country;
 	}
 
 	/**

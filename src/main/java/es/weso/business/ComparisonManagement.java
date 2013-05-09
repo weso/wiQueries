@@ -116,8 +116,8 @@ public class ComparisonManagement {
 		for (Observation ob : obs) {
 			if (first == null) {
 				first = ob;
-				first.setCountryName(name);
-				first.setCountryUri("");
+				first.setAreaName(name);
+				first.setAreaUri("");
 				first.setUri("");
 				first.setLabel(first.getIndicatorName() + " for " + name
 						+ " during " + first.getYear());

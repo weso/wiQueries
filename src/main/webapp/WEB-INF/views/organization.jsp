@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
-<title>Observations</title>
+<title>${organization.name}</title>
 <link rel="stylesheet" type="text/css"
 	href="/webindex/static/foundation/css/foundation.min.css" />
 <link rel="stylesheet" type="text/css"
@@ -19,24 +19,22 @@
 			<img src="/webindex/static/web-index.png" alt="Web Index"> <a
 				href="http://thewebindex.org" class="row">thewebindex.org</a>
 		</div>
-		<div class="large-6 columns">
-			<h3 class="right">Observations</h3>
-		</div>
 		<hr />
 	</header>
+
 	<div class="row">
-		<section class="section large-12 columns">
-			<ul>
-				<c:forEach items="${observationCollection.observations}"
-					var="observation">
-					<li>${observation.label} (<a class="uri"
-						href="${observation.indicatorUri}">${observation.indicatorName}</a>
-						at <a class="uri" href="${observation.areaUri}">${observation.areaName}</a>):
-						<strong>${observation.value}</strong>
-					</li>
-				</c:forEach>
-			</ul>
-		</section>
+		<div class="large-6 columns">
+			<p>
+				Find out more at <a href="${organization.webpage}">${organization.name}'s
+					webpage</a>
+			</p>
+		</div>
+		<div class="large-6 columns country_name">
+			<h1 id="title">${organization.name}</h1>
+			<img src="/webindex/static/flags/blank.gif"
+				class="logo logo-${organization.name}"
+				alt="Image of ${organization.name}" />
+		</div>
 	</div>
 	<footer class="row">
 		<p>

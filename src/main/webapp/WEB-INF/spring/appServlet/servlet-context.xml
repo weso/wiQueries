@@ -22,17 +22,21 @@
 		<property name="contentNegotiationManager">
 			<bean class="org.springframework.web.accept.ContentNegotiationManager">
 				<constructor-arg>
-					<bean
-						class="org.springframework.web.accept.PathExtensionContentNegotiationStrategy">
-						<constructor-arg>
-							<map>
-								<entry key="json" value="application/json" />
-								<entry key="xml" value="application/xml" />
-								<entry key="rdf" value="application/rdf+xml" />
-								<entry key="ttl" value="text/turtle" />
-							</map>
-						</constructor-arg>
-					</bean>
+					<list>
+						<bean
+							class="org.springframework.web.accept.PathExtensionContentNegotiationStrategy">
+							<constructor-arg>
+								<map>
+									<entry key="json" value="application/json" />
+									<entry key="xml" value="application/xml" />
+									<entry key="rdf" value="application/rdf+xml" />
+									<entry key="ttl" value="text/turtle" />
+								</map>
+							</constructor-arg>
+						</bean>
+						<bean
+							class="org.springframework.web.accept.HeaderContentNegotiationStrategy" />
+					</list>
 				</constructor-arg>
 			</bean>
 		</property>
@@ -46,14 +50,9 @@
 				<bean class="org.springframework.web.servlet.view.xml.MarshallingView">
 					<constructor-arg>
 						<bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
-							<property name="classesToBeBound">
+							<property name="packagesToScan">
 								<list>
-									<value>es.weso.model.Country</value>
-									<value>es.weso.model.Observation</value>
-									<value>es.weso.model.Rank</value>
-									<value>es.weso.model.RankMap</value>
-									<value>es.weso.model.CountryCollection</value>
-									<value>es.weso.model.ObservationCollection</value>
+									<value>es.weso.model</value>
 								</list>
 							</property>
 						</bean>

@@ -27,7 +27,7 @@
 		<section class="section large-12 columns">
 			${observation.label} (<a class="uri"
 				href="${observation.indicatorUri}">${observation.indicatorName}</a>
-			at <a class="uri" href="${observation.countryUri}">${observation.countryName}</a>):
+			at <a class="uri" href="${observation.areaUri}">${observation.areaName}</a>):
 			<strong>${observation.value}</strong>
 		</section>
 	</div>

@@ -20,9 +20,8 @@ public class Observation {
 
 	private String uri;
 	private String label;
-	private String countryName, countryUri, indicatorName, indicatorUri, year;
+	private String areaName, areaUri, indicatorName, indicatorUri, year;
 	private double value;
-	
 
 	@LinkedDataUri
 	public String getUri() {
@@ -32,7 +31,7 @@ public class Observation {
 	public void setUri(String uri) {
 		this.uri = uri;
 	}
-	
+
 	public String getLabel() {
 		return label;
 	}
@@ -41,20 +40,20 @@ public class Observation {
 		this.label = label;
 	}
 
-	public String getCountryName() {
-		return countryName;
+	public String getAreaName() {
+		return areaName;
 	}
 
-	public void setCountryName(String countryName) {
-		this.countryName = countryName;
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
 	}
 
-	public String getCountryUri() {
-		return countryUri;
+	public String getAreaUri() {
+		return areaUri;
 	}
 
-	public void setCountryUri(String countryUri) {
-		this.countryUri = countryUri;
+	public void setAreaUri(String areaUri) {
+		this.areaUri = areaUri;
 	}
 
 	public String getIndicatorName() {
@@ -94,9 +93,8 @@ public class Observation {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((countryName == null) ? 0 : countryName.hashCode());
-		result = prime * result
-				+ ((countryUri == null) ? 0 : countryUri.hashCode());
+				+ ((areaName == null) ? 0 : areaName.hashCode());
+		result = prime * result + ((areaUri == null) ? 0 : areaUri.hashCode());
 		result = prime * result
 				+ ((indicatorName == null) ? 0 : indicatorName.hashCode());
 		result = prime * result
@@ -117,15 +115,15 @@ public class Observation {
 		if (getClass() != obj.getClass())
 			return false;
 		Observation other = (Observation) obj;
-		if (countryName == null) {
-			if (other.countryName != null)
+		if (areaName == null) {
+			if (other.areaName != null)
 				return false;
-		} else if (!countryName.equals(other.countryName))
+		} else if (!areaName.equals(other.areaName))
 			return false;
-		if (countryUri == null) {
-			if (other.countryUri != null)
+		if (areaUri == null) {
+			if (other.areaUri != null)
 				return false;
-		} else if (!countryUri.equals(other.countryUri))
+		} else if (!areaUri.equals(other.areaUri))
 			return false;
 		if (indicatorName == null) {
 			if (other.indicatorName != null)

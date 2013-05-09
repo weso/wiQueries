@@ -2,6 +2,8 @@ package es.weso.views;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.servlet.view.AbstractView;
@@ -9,6 +11,8 @@ import org.springframework.web.servlet.view.AbstractView;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.sparql.engine.binding.Binding;
 
 import es.weso.util.Conf;
 import es.weso.util.JenaMemcachedClient;
@@ -78,7 +82,11 @@ public abstract class AbstractLinkedDataView extends AbstractView {
 	 */
 	protected ResultSet getDirectProperties(String uri) throws IOException {
 		JenaMemcachedClient client = JenaMemcachedClient.create();
-		return client.executeQuery(Conf.getQuery("all.about.entity", uri));
+		try {
+			return client.executeQuery(Conf.getQuery("all.about.entity", uri));
+		} catch (IllegalArgumentException e) {
+			return getEmptyResultSet();
+		}
 	}
 
 	/**
@@ -91,10 +99,14 @@ public abstract class AbstractLinkedDataView extends AbstractView {
 	 */
 	protected ResultSet getInverseProperties(String uri) throws IOException {
 		JenaMemcachedClient client = JenaMemcachedClient.create();
-		return client.executeQuery(Conf.getQuery("all.about.entity.inverse",
-				uri));
+		try {
+			return client.executeQuery(Conf.getQuery(
+					"all.about.entity.inverse", uri));
+		} catch (IllegalArgumentException e) {
+			return getEmptyResultSet();
+		}
 	}
-	
+
 	/**
 	 * Gets a number of tabulations
 	 * 
@@ -108,5 +120,41 @@ public abstract class AbstractLinkedDataView extends AbstractView {
 			tabulations += "\t";
 		}
 		return tabulations;
+	}
+
+	private ResultSet getEmptyResultSet() {
+		return new ResultSet() {
+
+			public void remove() {
+			}
+
+			public Model getResourceModel() {
+				return null;
+			}
+
+			public List<String> getResultVars() {
+				return Collections.emptyList();
+			}
+
+			public int getRowNumber() {
+				return 0;
+			}
+
+			public boolean hasNext() {
+				return false;
+			}
+
+			public QuerySolution next() {
+				return null;
+			}
+
+			public Binding nextBinding() {
+				return null;
+			}
+
+			public QuerySolution nextSolution() {
+				return null;
+			}
+		};
 	}
 }

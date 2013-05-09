@@ -3,7 +3,7 @@ package es.weso.wirouter.country;
 import java.util.ArrayDeque;
 import java.util.Collection;
 
-import es.weso.business.CountryManagement;
+import es.weso.business.RegionManagement;
 import es.weso.model.Country;
 
 public class NamedRegion extends CountryExpr {
@@ -19,7 +19,7 @@ public class NamedRegion extends CountryExpr {
 
 	@Override
 	public Collection<String> getCountryCodes() {
-		Collection<Country> countries = new CountryManagement()
+		Collection<Country> countries = new RegionManagement()
 				.getRegionCountries(name);
 		Collection<String> codes = new ArrayDeque<String>(countries.size());
 		for (Country country : countries) {

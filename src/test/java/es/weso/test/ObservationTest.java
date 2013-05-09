@@ -37,7 +37,7 @@ public class ObservationTest {
 		Observation seQ9ab2011 = cm.getObservation("2011", "Q9ab", "SWE");
 		Assert.assertEquals(9.0, seQ9ab2011.getValue());
 		Assert.assertEquals("2011", seQ9ab2011.getYear());
-		Assert.assertEquals("SE", seQ9ab2011.getCountryName());
+		Assert.assertEquals("Sweden", seQ9ab2011.getAreaName());
 		Assert.assertEquals("Q9ab", seQ9ab2011.getIndicatorName());
 	}
 
@@ -46,7 +46,7 @@ public class ObservationTest {
 		Observation esItud2011 = cm.getObservation("2011", "ITUD", "ES");
 		Assert.assertEquals(114.233016778964, esItud2011.getValue());
 		Assert.assertEquals("2011", esItud2011.getYear());
-		Assert.assertEquals("ES", esItud2011.getCountryName());
+		Assert.assertEquals("Spain", esItud2011.getAreaName());
 		Assert.assertEquals("ITUD", esItud2011.getIndicatorName());
 	}
 }
