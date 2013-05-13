@@ -4,10 +4,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 
+import es.weso.annotations.LinkedDataEntity;
 import es.weso.annotations.LinkedDataUri;
 
 @JsonAutoDetect
 @XmlRootElement
+@LinkedDataEntity(type = "qb:Observation")
 /**
  * Representation of an observation
  * 

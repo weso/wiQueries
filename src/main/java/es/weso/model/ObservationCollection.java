@@ -7,8 +7,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 
+import es.weso.annotations.LinkedDataCollection;
+import es.weso.annotations.LinkedDataEntity;
+
 @JsonAutoDetect
 @XmlRootElement
+@LinkedDataEntity(type = "qb:Observation")
 /**
  * Class that automatically maps a {@link Collection} of {@link Observation}s
  * 
@@ -25,6 +29,7 @@ public class ObservationCollection {
 		observations = new HashSet<Observation>();
 	}
 
+	@LinkedDataCollection
 	public Collection<Observation> getObservations() {
 		return observations;
 	}

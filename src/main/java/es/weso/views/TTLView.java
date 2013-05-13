@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Literal;
 
+import es.weso.annotations.LinkedDataCollection;
 import es.weso.annotations.LinkedDataEntity;
 import es.weso.annotations.LinkedDataUri;
 import es.weso.util.Conf;
@@ -102,9 +104,23 @@ public class TTLView extends AbstractLinkedDataView {
 			ByteArrayOutputStream baos) throws IllegalAccessException,
 			InvocationTargetException, IOException {
 		String uri = writeUri(TTLObject, baos);
-		writeProperties(baos, uri);
-		baos.write(" .\n".getBytes());
-		writeInverseProperties(baos, uri);
+		if (uri == null) {
+			for (Method method : TTLObject.getClass().getMethods()) {
+				LinkedDataCollection colAnnotation = method
+						.getAnnotation(LinkedDataCollection.class);
+				if (colAnnotation != null) {
+					Collection<Object> objs = (Collection<Object>) method
+							.invoke(TTLObject);
+					for (Object obj : objs) {
+						entityToTTL(obj, type, baos);
+					}
+				}
+			}
+		} else {
+			writeProperties(baos, uri);
+			baos.write(" .\n".getBytes());
+			writeInverseProperties(baos, uri);
+		}
 	}
 
 	/**
